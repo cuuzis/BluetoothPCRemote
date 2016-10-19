@@ -1,0 +1,11 @@
+c:\users\gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\bin\Debug\TrayIconBluetoothController.exe.config
+c:\users\gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\bin\Debug\TrayIconBluetoothController.exe
+c:\users\gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\bin\Debug\TrayIconBluetoothController.pdb
+c:\users\gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\obj\Debug\TrayIconBluetoothController.csprojResolveAssemblyReference.cache
+c:\users\gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\obj\Debug\TrayIconBluetoothController.Form1.resources
+c:\users\gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\obj\Debug\TrayIconBluetoothController.Properties.Resources.resources
+c:\users\gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\obj\Debug\TrayIconBluetoothController.csproj.GenerateResource.Cache
+c:\users\gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\obj\Debug\TrayIconBluetoothController.exe
+c:\users\gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\obj\Debug\TrayIconBluetoothController.pdb
+C:\Users\Gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\bin\Debug\InTheHand.Net.Personal.dll
+C:\Users\Gustavs\documents\visual studio 2015\Projects\TrayIconBluetoothController\TrayIconBluetoothController\bin\Debug\InTheHand.Net.Personal.xml
