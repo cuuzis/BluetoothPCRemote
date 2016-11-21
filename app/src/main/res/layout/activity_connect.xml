@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.gustavs.bluetoothpcremote.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status pending..."
+        android:id="@+id/connectionInfo" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="↑"
+        android:id="@+id/up"
+        android:contextClickable="false"
+        android:layout_marginTop="91dp"
+        android:layout_below="@+id/connectionInfo"
+        android:layout_centerHorizontal="true"
+        android:clickable="false"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="↓"
+        android:id="@+id/down"
+        android:contextClickable="false"
+        android:layout_below="@+id/up"
+        android:layout_centerHorizontal="true"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="←"
+        android:id="@+id/left"
+        android:contextClickable="false"
+        android:layout_alignBottom="@+id/down"
+        android:layout_toLeftOf="@+id/down"
+        android:layout_toStartOf="@+id/down"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="→"
+        android:id="@+id/right"
+        android:contextClickable="false"
+        android:layout_alignBottom="@+id/down"
+        android:layout_toRightOf="@+id/down"
+        android:layout_toEndOf="@+id/down"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Space"
+        android:id="@+id/space"
+        android:contextClickable="false"
+        android:layout_below="@+id/down"
+        android:layout_alignLeft="@+id/left"
+        android:layout_alignStart="@+id/left"
+        android:layout_alignRight="@+id/right"
+        android:layout_alignEnd="@+id/right"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ctrl + F5"
+        android:id="@+id/ctrl_f5"
+        android:contextClickable="false"
+        android:layout_below="@+id/connectionInfo"
+        android:layout_alignLeft="@+id/up"
+        android:layout_alignStart="@+id/up"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="F5"
+        android:id="@+id/f5"
+        android:contextClickable="false"
+        android:layout_below="@+id/connectionInfo"
+        android:layout_toLeftOf="@+id/up"
+        android:layout_toStartOf="@+id/up"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CTRL + L"
+        android:id="@+id/ctrl_l"
+        android:contextClickable="false"
+        android:layout_alignBaseline="@+id/ctrl_f5"
+        android:layout_alignBottom="@+id/ctrl_f5"
+        android:layout_toRightOf="@+id/ctrl_f5"
+        android:layout_toEndOf="@+id/ctrl_f5"
+        android:onClick="onButtonDown" />
+</RelativeLayout>

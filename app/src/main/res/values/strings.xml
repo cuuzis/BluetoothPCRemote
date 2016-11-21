@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Bluetooth PC Remote</string>
+    <string name="connect_btn_text">Connect via Bluetooth</string>
+    <string name="not_connected">Not connected</string>
 </resources>

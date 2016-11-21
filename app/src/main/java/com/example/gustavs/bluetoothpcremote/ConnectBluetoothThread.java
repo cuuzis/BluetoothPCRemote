@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.util.UUID;
 
 
-public class ConnectThread extends Thread {
+public class ConnectBluetoothThread extends Thread {
     private final BluetoothSocket mmSocket;
     private final BluetoothDevice mmDevice;
     private BluetoothAdapter mBluetoothAdapter;
@@ -19,7 +19,7 @@ public class ConnectThread extends Thread {
     private static UUID GUID = UUID.fromString("d07c0736-07b9-4ec5-b876-53647c4d047b");
 
 
-    public ConnectThread(BluetoothDevice device, BluetoothAdapter btAdapter) {
+    public ConnectBluetoothThread(BluetoothDevice device, BluetoothAdapter btAdapter) {
         BluetoothSocket tmp = null;
         mmDevice = device;
         try {
