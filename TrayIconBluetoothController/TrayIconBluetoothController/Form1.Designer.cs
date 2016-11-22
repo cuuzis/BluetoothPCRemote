@@ -53,26 +53,26 @@ namespace TrayIconBluetoothController
             this.showToolStripMenuItem,
             this.hideToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(121, 56);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(115, 52);
             // 
             // showToolStripMenuItem
             // 
             this.showToolStripMenuItem.Name = "showToolStripMenuItem";
-            this.showToolStripMenuItem.Size = new System.Drawing.Size(120, 26);
+            this.showToolStripMenuItem.Size = new System.Drawing.Size(114, 24);
             this.showToolStripMenuItem.Text = "Show";
             this.showToolStripMenuItem.Click += new System.EventHandler(this.showToolStripMenuItem_Click);
             // 
             // hideToolStripMenuItem
             // 
             this.hideToolStripMenuItem.Name = "hideToolStripMenuItem";
-            this.hideToolStripMenuItem.Size = new System.Drawing.Size(120, 26);
+            this.hideToolStripMenuItem.Size = new System.Drawing.Size(114, 24);
             this.hideToolStripMenuItem.Text = "Exit";
             this.hideToolStripMenuItem.Click += new System.EventHandler(this.hideToolStripMenuItem_Click);
             // 
             // notifyIcon1
             // 
             this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.red")));
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
@@ -87,6 +87,7 @@ namespace TrayIconBluetoothController
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "System Tray";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Move += new System.EventHandler(this.Form1_Move);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
