@@ -19,7 +19,8 @@ namespace TrayIconBluetoothController
             //System.ComponentModel.ComponentResourceManager resources
 
             //BluetoothConnector btConnector = new BluetoothConnector(this);
-            WiFiDirectConnector wifiConnector = new WiFiDirectConnector(this);
+            //WiFiDirectConnector wifiConnector = new WiFiDirectConnector(this);
+            WlanConnector wlanConnector = new WlanConnector(this);
         }
 
         // To hide the form in tray on startup
