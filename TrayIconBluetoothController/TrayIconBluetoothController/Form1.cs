@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TrayIconBluetoothController
@@ -18,9 +19,16 @@ namespace TrayIconBluetoothController
             //this.notifyIcon1.Icon = new Icon("Resources/redBTicon.ico"); //((System.Drawing.Icon)(("redBTicon.ico")));
             //System.ComponentModel.ComponentResourceManager resources
 
-            //BluetoothConnector btConnector = new BluetoothConnector(this);
-            //WiFiDirectConnector wifiConnector = new WiFiDirectConnector(this);
-            WlanConnector wlanConnector = new WlanConnector(this);
+            
+            WiFiDirectConnector wifiConnector = new WiFiDirectConnector(this);
+            Parallel.Invoke( () => {
+                    WlanConnector wlanConnector = new WlanConnector(this);
+                }, () => {
+                    BluetoothConnector btConnector = new BluetoothConnector(this);
+                }
+            );
+            
+            
         }
 
         // To hide the form in tray on startup
