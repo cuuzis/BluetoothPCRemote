@@ -1,4 +1,4 @@
-package com.example.gustavs.bluetoothpcremote;
+package com.example.gustavs.remotepccontroller.wifidirect;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,10 @@ import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.example.gustavs.remotepccontroller.ConnectActivity;
+import com.example.gustavs.remotepccontroller.R;
+import com.example.gustavs.remotepccontroller.wifi.WiFiDirectBroadcastReceiver;
 
 public class ConnectWiFiDirectActivity extends ConnectActivity {
 
@@ -47,7 +51,7 @@ public class ConnectWiFiDirectActivity extends ConnectActivity {
     }
 
     @Override
-    void writeToThread(String str) {
+    protected void sendCommand(String command) {
         // Not implemented
     }
 

@@ -1,4 +1,4 @@
-package com.example.gustavs.bluetoothpcremote;
+package com.example.gustavs.remotepccontroller.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -11,8 +11,6 @@ import java.util.UUID;
 
 public class ConnectBluetoothThread extends Thread {
     private final BluetoothSocket mmSocket;
-    private final BluetoothDevice mmDevice;
-    private BluetoothAdapter mBluetoothAdapter;
     private final OutputStream mmOutStream;
 
     // Constants used in server and client
@@ -21,7 +19,6 @@ public class ConnectBluetoothThread extends Thread {
 
     public ConnectBluetoothThread(BluetoothDevice device, BluetoothAdapter btAdapter) {
         BluetoothSocket tmp = null;
-        mmDevice = device;
         try {
             tmp = device.createRfcommSocketToServiceRecord(GUID);
         } catch (IOException e) { }

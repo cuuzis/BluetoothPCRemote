@@ -10,6 +10,7 @@ The intended usage is to control presentations and movies wirelessly from Androi
 
 ## Proposed Features
 Must haves
+* QR code scanning to send connection info (using Google Barcode API)
 * Connect to PC via Bluetooth
 * Connect to PC via WiFi network
 * Connect to PC alternating between BT and WiFi

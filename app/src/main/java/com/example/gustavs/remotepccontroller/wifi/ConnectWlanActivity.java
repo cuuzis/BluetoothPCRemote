@@ -1,7 +1,9 @@
-package com.example.gustavs.bluetoothpcremote;
+package com.example.gustavs.remotepccontroller.wifi;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import com.example.gustavs.remotepccontroller.ConnectActivity;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,7 +15,7 @@ public class ConnectWlanActivity extends ConnectActivity {
 
     private ConnectWlanTask connectWlanTask;
     private OutputStream mmOutStream;
-    public static final String SERVER_IP = "172.24.20.133";
+    public static final String SERVER_IP = "10.7.153.161";//"192.168.137.1";//"172.24.20.133";
     public static final int SERVER_PORT = 8001;
 
     @Override
@@ -28,9 +30,9 @@ public class ConnectWlanActivity extends ConnectActivity {
     }
 
     @Override
-    void writeToThread(String str) {
-        System.out.println("TCP writing: " + str);
-        connectWlanTask.write(str);
+    protected void sendCommand(String command) {
+        System.out.println("TCP writing: " + command);
+        connectWlanTask.write(command);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class ConnectWlanActivity extends ConnectActivity {
             try {
                 serverAddr = InetAddress.getByName(SERVER_IP);
                 Socket socket = new Socket(serverAddr, SERVER_PORT);
-                System.out.println("Connected to socket");
+                System.out.println("Connected to " + SERVER_IP + ":" + SERVER_PORT);
                 mmOutStream = socket.getOutputStream();
             } catch (IOException e) {
                 if (e instanceof UnknownHostException) {

@@ -1,12 +1,10 @@
-package com.example.gustavs.bluetoothpcremote;
+package com.example.gustavs.remotepccontroller;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
-
-import java.util.Set;
 
 public abstract class ConnectActivity extends AppCompatActivity {
 
@@ -37,28 +35,28 @@ public abstract class ConnectActivity extends AppCompatActivity {
         }
         switch (v.getId()) {
             case R.id.up:
-                writeToThread(UP);
+                sendCommand(UP);
                 break;
             case R.id.down:
-                writeToThread(DOWN);
+                sendCommand(DOWN);
                 break;
             case R.id.left:
-                writeToThread(LEFT);
+                sendCommand(LEFT);
                 break;
             case R.id.right:
-                writeToThread(RIGHT);
+                sendCommand(RIGHT);
                 break;
             case R.id.space:
-                writeToThread(SPACE);
+                sendCommand(SPACE);
                 break;
             case R.id.f5:
-                writeToThread(F5);
+                sendCommand(F5);
                 break;
             case R.id.ctrl_f5:
-                writeToThread(CTRL_F5);
+                sendCommand(CTRL_F5);
                 break;
             case R.id.ctrl_l:
-                writeToThread(CTRL_L);
+                sendCommand(CTRL_L);
                 break;
             default:
                 System.out.println("Error:invalid button");
@@ -72,9 +70,9 @@ public abstract class ConnectActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-            writeToThread("LEFT");
+            sendCommand("LEFT");
         } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            writeToThread("RIGHT");
+            sendCommand("RIGHT");
         } else {
             return super.onKeyDown(keyCode, event);
         }
@@ -90,5 +88,5 @@ public abstract class ConnectActivity extends AppCompatActivity {
         return super.onKeyUp(keyCode, event);
     }
 
-    abstract void writeToThread(String str);
+    protected abstract void sendCommand(String command);
 }

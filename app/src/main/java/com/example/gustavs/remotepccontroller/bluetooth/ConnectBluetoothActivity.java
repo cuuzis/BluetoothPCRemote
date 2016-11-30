@@ -1,10 +1,13 @@
-package com.example.gustavs.bluetoothpcremote;
+package com.example.gustavs.remotepccontroller.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.example.gustavs.remotepccontroller.ConnectActivity;
+import com.example.gustavs.remotepccontroller.R;
 
 import java.util.Set;
 
@@ -35,8 +38,8 @@ public class ConnectBluetoothActivity extends ConnectActivity {
     }
 
     @Override
-    void writeToThread(String str) {
-        connectBluetoothThread.write(str);
+    protected void sendCommand(String command) {
+        connectBluetoothThread.write(command);
     }
 
     private void promptToEnableBluetooth() {
@@ -53,7 +56,7 @@ public class ConnectBluetoothActivity extends ConnectActivity {
             for (BluetoothDevice device : pairedDevices) {
                 // Add the name and address to an array adapter to show in a ListView
                 System.out.println(device.getName() + "\n" + device.getAddress() + "\n");
-                // hardcoded device name
+                // TODO: remove hardcoded device name
                 if (device.getName().equals("CUZIS-PC")) {
                     mmDevice = device;
                     break;

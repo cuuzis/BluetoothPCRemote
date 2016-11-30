@@ -1,18 +1,44 @@
-package com.example.gustavs.bluetoothpcremote;
+package com.example.gustavs.remotepccontroller.wifi;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
+
+import com.example.gustavs.remotepccontroller.wifidirect.ConnectWiFiDirectActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private ConnectWiFiDirectActivity mActivity;
+    private List peers = new ArrayList();
 
-    private WifiP2pManager.PeerListListener myPeerListListener;
+    //private WifiP2pManager.PeerListListener myPeerListListener;
+    private WifiP2pManager.PeerListListener myPeerListListener = new WifiP2pManager.PeerListListener() {
+        @Override
+        public void onPeersAvailable(WifiP2pDeviceList peerList) {
+
+            // Out with the old, in with the new.
+            peers.clear();
+            peers.addAll(peerList.getDeviceList());
+
+            // If an AdapterView is backed by this data, notify it
+            // of the change.  For instance, if you have a ListView of available
+            // peers, trigger an update.
+            //((WiFiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
+            if (peers.size() == 0) {
+                System.out.println("No devices found");
+                return;
+            } else {
+                System.out.println("Devices found!");
+            }
+        }
+    };
 
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel, ConnectWiFiDirectActivity activity) {
         super();
@@ -40,6 +66,16 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             if (mManager != null) {
                 System.out.println("PEERS NOT NULL");
                 mManager.requestPeers(mChannel, myPeerListListener);
+
+                /*mManager.requestPeers(mChannel, new WifiP2pManager.PeerListListener() {
+                    @Override
+                    public void onPeersAvailable(WifiP2pDeviceList peers) {
+                        System.out.println(String.format("PeerListListener: %d peers available, updating device list", peers.getDeviceList().size()));
+
+                        // DO WHATEVER YOU WANT HERE
+                        // YOU CAN GET ACCESS TO ALL THE DEVICES YOU FOUND FROM peers OBJECT
+
+                    }});*/
             } else {
                 System.out.println("PEERS NULL");
             }

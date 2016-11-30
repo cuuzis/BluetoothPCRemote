@@ -1,4 +1,4 @@
-package com.example.gustavs.bluetoothpcremote;
+package com.example.gustavs.remotepccontroller;
 
 import org.junit.Test;
 
