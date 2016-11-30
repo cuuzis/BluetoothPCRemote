@@ -19,14 +19,18 @@ namespace TrayIconBluetoothController
             //this.notifyIcon1.Icon = new Icon("Resources/redBTicon.ico"); //((System.Drawing.Icon)(("redBTicon.ico")));
             //System.ComponentModel.ComponentResourceManager resources
 
-            
-            WiFiDirectConnector wifiConnector = new WiFiDirectConnector(this);
+
+            /*WiFiDirectConnector wifiConnector = new WiFiDirectConnector(this);
             Parallel.Invoke( () => {
                     WlanConnector wlanConnector = new WlanConnector(this);
                 }, () => {
                     BluetoothConnector btConnector = new BluetoothConnector(this);
                 }
-            );
+            );*/
+
+            string testMessage = "test post, please ignore!";
+            this.qrCodePicturebox.Image = QRCodeGenerator.GenerateQRCode(testMessage, 180);
+            this.qrCodePicturebox.Refresh();
             
             
         }
@@ -65,6 +69,10 @@ namespace TrayIconBluetoothController
         public void NotifyEstablishedConnection() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.green")));
+        }
+
+        private void label1_Click(object sender, EventArgs e) {
+
         }
     }
 }

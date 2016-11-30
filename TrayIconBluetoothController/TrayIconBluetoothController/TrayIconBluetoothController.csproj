@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gma.QrCodeNet.Encoding, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gma.QrCodeNet.0.4.1.2\lib\net40\Gma.QrCodeNet.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="InTheHand.Net.Personal, Version=3.5.605.0, Culture=neutral, PublicKeyToken=ea38caa273134499, processorArchitecture=MSIL">
       <HintPath>..\packages\32feet.NET.3.5.0.0\lib\net\InTheHand.Net.Personal.dll</HintPath>
       <Private>True</Private>
@@ -67,6 +71,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QRCodeGenerator.cs" />
     <Compile Include="WlanConnector.cs" />
     <Compile Include="WiFiDirectConnector.cs" />
     <EmbeddedResource Include="Form1.resx">
