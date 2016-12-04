@@ -2,21 +2,32 @@ package com.example.gustavs.remotepccontroller.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.gustavs.remotepccontroller.ConnectActivity;
-import com.example.gustavs.remotepccontroller.R;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Set;
+import java.util.UUID;
 
 public class ConnectBluetoothActivity extends ConnectActivity {
 
+    private static final String TAG = ConnectBluetoothActivity.class.getSimpleName();
     private final int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothDevice mmDevice;
-    private ConnectBluetoothThread connectBluetoothThread;
+    //private ConnectBluetoothThread connectBluetoothThread;
+
+    private ConnectBluetoothTask connectBluetoothTask;
+    private BluetoothSocket mmSocket;
+    private OutputStream mmOutStream;
+    private final static UUID GUID = UUID.fromString("d07c0736-07b9-4ec5-b876-53647c4d047b"); // used in server
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +36,7 @@ public class ConnectBluetoothActivity extends ConnectActivity {
         //Check bluetooth status
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
-            // Device does not support Bluetooth
-            System.out.println("Device does not support Bluetooth");
-            ((TextView) findViewById(R.id.connectionInfo) ).setText("Bluetooth not supported");
+            Toast.makeText(this, "Device does not support Bluetooth", Toast.LENGTH_SHORT).show();
         }
         else if (!mBluetoothAdapter.isEnabled()) {
             promptToEnableBluetooth();
@@ -39,7 +48,8 @@ public class ConnectBluetoothActivity extends ConnectActivity {
 
     @Override
     protected void sendCommand(String command) {
-        connectBluetoothThread.write(command);
+        //connectBluetoothThread.write(command);
+        connectBluetoothTask.write(command);
     }
 
     private void promptToEnableBluetooth() {
@@ -48,15 +58,14 @@ public class ConnectBluetoothActivity extends ConnectActivity {
     }
 
     private void connectToWindows() {
-        System.out.println("Connecting to PC via Bluetooth...");
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         // If there are paired devices
         if (pairedDevices.size() > 0) {
             // Loop through paired devices
             for (BluetoothDevice device : pairedDevices) {
                 // Add the name and address to an array adapter to show in a ListView
-                System.out.println(device.getName() + "\n" + device.getAddress() + "\n");
-                // TODO: remove hardcoded device name
+                Log.i(TAG, device.getName() + " @ " + device.getAddress());
+                // TODO: remove hardcoded device name and scan for devices
                 if (device.getName().equals("CUZIS-PC")) {
                     mmDevice = device;
                     break;
@@ -64,15 +73,16 @@ public class ConnectBluetoothActivity extends ConnectActivity {
             }
         }
         if (mmDevice != null) {
-            connectBluetoothThread = new ConnectBluetoothThread(mmDevice, mBluetoothAdapter);
-            connectBluetoothThread.run();
-            System.out.println("Established Bluetooth connection");
-            ((TextView) findViewById(R.id.connectionInfo) ).setText("Established Bluetooth connection");
-            threadIsConnected = true;
+            Log.i(TAG, "Connecting to " + "CUZIS-PC");
+            connectBluetoothTask = new ConnectBluetoothTask();
+            connectBluetoothTask.execute();
+            //connectBluetoothThread = new ConnectBluetoothThread(mmDevice, mBluetoothAdapter);
+            //connectBluetoothThread.run();
+            //setIsConnected(true);
         }
         else {
-            System.out.println("Device not found");
-            ((TextView) findViewById(R.id.connectionInfo) ).setText("Device not found");
+            Toast.makeText(this, "Device not found", Toast.LENGTH_SHORT).show();
+            setIsConnected(false);
         }
     }
 
@@ -83,7 +93,48 @@ public class ConnectBluetoothActivity extends ConnectActivity {
             connectToWindows();
         }
         else {
-            ((TextView) findViewById(R.id.connectionInfo) ).setText("Bluetooth not enabled");
+            setIsConnected(false);
         }
     }
+
+    private class ConnectBluetoothTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            setIsConnected(mmOutStream != null);
+        }
+
+        public void write(String message) {
+            byte[] msg = message.getBytes();
+            try {
+                mmOutStream.write(msg);
+            } catch (IOException e) {
+                Log.e(TAG, "BT write error", e);
+            }
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            try {
+                mmSocket = mmDevice.createRfcommSocketToServiceRecord(GUID);
+                mmSocket.connect(); // This will block until it succeeds or throws an exception
+                mmOutStream = mmSocket.getOutputStream();
+            } catch (IOException e) {
+                Log.e(TAG, "BT socket connecting error", e);
+                cancel();
+            }
+            return null;
+        }
+
+        /** Will cancel an in-progress connection, and close the socket */
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) {
+                Log.e(TAG, "BT socket close error", e);
+            }
+        }
+    }
+
 }

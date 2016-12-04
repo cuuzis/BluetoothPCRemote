@@ -1,4 +1,4 @@
-package com.example.gustavs.remotepccontroller.wifi;
+package com.example.gustavs.remotepccontroller.wifidirect;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

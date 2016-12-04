@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="server_uuid">d07c0736-07b9-4ec5-b876-53647c4d047b</string>
+    <string name="server_up">UP</string>
+    <string name="server_down">DOWN</string>
+    <string name="server_left">LEFT</string>
+    <string name="server_right">RIGHT</string>
+    <string name="server_space">SPACE</string>
+    <string name="server_f5">F5</string>
+    <string name="server_ctrl_f5">CTRL_F5</string>
+    <string name="server_ctrl_l">CTRL_L</string>
+</resources>

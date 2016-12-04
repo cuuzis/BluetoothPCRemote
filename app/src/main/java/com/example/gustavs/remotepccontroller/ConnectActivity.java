@@ -1,65 +1,78 @@
 package com.example.gustavs.remotepccontroller;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
 public abstract class ConnectActivity extends AppCompatActivity {
 
-    protected boolean threadIsConnected = false;
+    private static final String TAG = ConnectActivity.class.getSimpleName();
+    private boolean isThreadConnected = false;
+    private ProgressDialog dialog;
 
-    // Constants used in server and client
-    protected final String UP      = "UP";
-    protected final String DOWN    = "DOWN";
-    protected final String LEFT    = "LEFT";
-    protected final String RIGHT   = "RIGHT";
-    protected final String SPACE   = "SPACE";
-    protected final String F5      = "F5";
-    protected final String CTRL_F5 = "CTRL_F5";
-    protected final String CTRL_L  = "CTRL_L";
+    // Sends command string to server
+    protected abstract void sendCommand(String command);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connect);
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Establishing connection...");
+        dialog.show();
+    }
+
+    // must always be called in subclass
+    protected void setIsConnected(boolean isConnected) {
+        if (dialog.isShowing())
+            dialog.dismiss();
+        if (isConnected) {
+            isThreadConnected = true;
+            setContentView(R.layout.activity_connect);
+        } else {
+            Toast.makeText(this, "Could not connect, check log!", Toast.LENGTH_SHORT).show();
+            this.finish();
+        }
     }
 
 
     // Buttons are mapped to command strings by their IDs
     protected void onButtonDown(View v) {
-        if (!threadIsConnected) {
+        if (!isThreadConnected) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
         switch (v.getId()) {
             case R.id.up:
-                sendCommand(UP);
+                sendCommand(getResources().getString(R.string.server_up));
                 break;
             case R.id.down:
-                sendCommand(DOWN);
+                sendCommand(getResources().getString(R.string.server_down));
                 break;
             case R.id.left:
-                sendCommand(LEFT);
+                sendCommand(getResources().getString(R.string.server_left));
                 break;
             case R.id.right:
-                sendCommand(RIGHT);
+                sendCommand(getResources().getString(R.string.server_right));
                 break;
             case R.id.space:
-                sendCommand(SPACE);
+                sendCommand(getResources().getString(R.string.server_space));
                 break;
             case R.id.f5:
-                sendCommand(F5);
+                sendCommand(getResources().getString(R.string.server_f5));
                 break;
             case R.id.ctrl_f5:
-                sendCommand(CTRL_F5);
+                sendCommand(getResources().getString(R.string.server_ctrl_f5));
                 break;
             case R.id.ctrl_l:
-                sendCommand(CTRL_L);
+                sendCommand(getResources().getString(R.string.server_ctrl_l));
                 break;
             default:
-                System.out.println("Error:invalid button");
+                Log.e(TAG, "Invalid message");
                 break;
         }
     }
@@ -70,9 +83,9 @@ public abstract class ConnectActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-            sendCommand("LEFT");
+            sendCommand(getResources().getString(R.string.server_left));
         } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            sendCommand("RIGHT");
+            sendCommand(getResources().getString(R.string.server_right));
         } else {
             return super.onKeyDown(keyCode, event);
         }
@@ -88,5 +101,4 @@ public abstract class ConnectActivity extends AppCompatActivity {
         return super.onKeyUp(keyCode, event);
     }
 
-    protected abstract void sendCommand(String command);
 }

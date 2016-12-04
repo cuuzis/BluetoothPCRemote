@@ -8,12 +8,14 @@ import android.content.IntentFilter;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.example.gustavs.remotepccontroller.MainActivity;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,11 +29,6 @@ public class ScanNetwork {
 
     public void doScan(Activity mActivity) {
         this.mainActivity = mActivity;
-
-        GetLocalIp();
-        ConnectToNetwork(SSID, KEY);
-        GetLocalIp();
-
 
         System.out.println("Starting subnet scan");
         ExecutorService executor = Executors.newFixedThreadPool(NB_THREADS);
@@ -62,23 +59,6 @@ public class ScanNetwork {
         String netmask = intToIp(dhcp.netmask);
         System.out.println("IP: " + ipAddr);
         System.out.println("Netmask: " + netmask);
-    }
-
-    private void ConnectToNetwork(String ssid, String key) {
-        //WPA2
-        WifiConfiguration conf = new WifiConfiguration();
-        conf.SSID = "\"" + SSID + "\"";
-        conf.preSharedKey = "\""+ KEY +"\"";
-
-        WifiManager wifiManager = (WifiManager)mainActivity.getBaseContext().getSystemService(Context.WIFI_SERVICE);
-        int netId = wifiManager.addNetwork(conf);
-        if(!wifiManager.isWifiEnabled())
-            wifiManager.setWifiEnabled(true);
-        //wifiManager.disconnect(); according to the javadoc of enableNetwork, if you use boolean disableOthers true, then you dont have to disconnect or connect, it will do both for you
-        wifiManager.enableNetwork(netId, true);
-        //wifiManager.reconnect();
-        System.out.println("Reconnecting WiFi...");
-        // TODO: needs to work with disabled WiFi signal; needs to wait until phone is connected to wifi before scan
     }
 
     public String intToIp(int i) {
@@ -119,6 +99,36 @@ public class ScanNetwork {
             }
         };
     }
+
+    //region Find IPs by hostname
+
+    private static class FindNetwork extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String hostname = strings[0];
+            System.out.println("Hostname: " + hostname);
+            hostname = "cuzis-pc";
+            InetAddress[] addresses = new InetAddress[0];
+            try {
+                addresses = InetAddress.getAllByName(hostname);
+            } catch (UnknownHostException e) {
+                System.out.println("Unknown host exception");
+                e.printStackTrace();
+            }
+            for (InetAddress address : addresses) {
+                System.out.println("Address found: "+ address);
+            }
+            return null;
+        }
+    }
+
+    public static void FindIPsByHostname(String hostname) {
+        FindNetwork findNetwork = new FindNetwork();
+        findNetwork.execute(hostname);
+    }
+
+    //endregion
 
 
     //region Connecting to a wifi AP

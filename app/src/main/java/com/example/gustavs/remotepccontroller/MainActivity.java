@@ -1,11 +1,6 @@
 package com.example.gustavs.remotepccontroller;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +12,6 @@ import com.example.gustavs.remotepccontroller.barcodereader.BarcodeMainActivity;
 import com.example.gustavs.remotepccontroller.wifi.ConnectWlanActivity;
 import com.example.gustavs.remotepccontroller.wifi.ScanNetwork;
 
-import static com.example.gustavs.remotepccontroller.wifi.ScanNetwork.ConnectToNetwork;
 
 //TODO: lost connection on portrait<->landscape change; no connection establishes if bluetooth is not already on; icon
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void connectViaWiFiDirect(View v) {
+        //ScanNetwork scanNetwork = new ScanNetwork();
+        //scanNetwork.FindIPsByHostname("cuzis-pc");
         Toast.makeText(this, "Not implemented", Toast.LENGTH_SHORT).show();
 
         //ScanNetwork scanNetwork = new ScanNetwork();
@@ -48,8 +44,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void connectViaWlan(View v) {
-        Intent i = new Intent(this, ConnectWlanActivity.class);
-        startActivity(i);
+        Intent intent = new Intent(this, ConnectWlanActivity.class);
+        /*Bundle bundle = new Bundle();
+        bundle.putString("SERVER_NAME", "cuzis-pc");
+        intent.putExtras(bundle);*/
+        startActivity(intent);
     }
 
     public void scanQRCode(View v) {

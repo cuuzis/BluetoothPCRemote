@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bluetooth PC Remote</string>
+    <string name="app_name">Wireless PC Remote</string>
     <string name="btn_connectViaBluetooth">Connect via Bluetooth</string>
     <string name="btn_connectViaWiFiDirect">Connect via WiFi Direct</string>
     <string name="not_connected">Not connected</string>

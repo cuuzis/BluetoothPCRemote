@@ -3,6 +3,7 @@ package com.example.gustavs.remotepccontroller.bluetooth;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,24 +11,28 @@ import java.util.UUID;
 
 
 public class ConnectBluetoothThread extends Thread {
+
+    private static final String TAG = ConnectBluetoothThread.class.getSimpleName();
     private final BluetoothSocket mmSocket;
     private final OutputStream mmOutStream;
-
-    // Constants used in server and client
-    private static UUID GUID = UUID.fromString("d07c0736-07b9-4ec5-b876-53647c4d047b");
-
+    private final static UUID GUID = UUID.fromString("d07c0736-07b9-4ec5-b876-53647c4d047b"); // used in server
 
     public ConnectBluetoothThread(BluetoothDevice device, BluetoothAdapter btAdapter) {
         BluetoothSocket tmp = null;
         try {
             tmp = device.createRfcommSocketToServiceRecord(GUID);
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            Log.e(TAG, "Error creating BT socket", e);
+            //finish();  ??
+        }
         mmSocket = tmp;
 
         OutputStream tmpOut = null;
         try {
             tmpOut = mmSocket.getOutputStream();
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            Log.e(TAG, "Error creating BT stream", e);
+        }
         mmOutStream = tmpOut;
     }
 
@@ -39,12 +44,10 @@ public class ConnectBluetoothThread extends Thread {
             // Connect the device through the socket. This will block
             // until it succeeds or throws an exception
             mmSocket.connect();
-        } catch (IOException connectException) {
-            // Unable to connect; close the socket and get out
-            try {
-                mmSocket.close();
-            } catch (IOException closeException) { }
-            return;
+
+        } catch (IOException e) {
+            Log.e(TAG, "BT socket connect error", e);
+            cancel();
         }
     }
 
@@ -53,8 +56,7 @@ public class ConnectBluetoothThread extends Thread {
         try {
             mmOutStream.write(msg);
         } catch (IOException e) {
-            System.out.println("Write error");
-            e.printStackTrace();
+            Log.e(TAG, "BT write error", e);
         }
     }
 
@@ -62,6 +64,8 @@ public class ConnectBluetoothThread extends Thread {
     public void cancel() {
         try {
             mmSocket.close();
-        } catch (IOException e) { }
+        } catch (IOException e) {
+            Log.e(TAG, "BT socket close error", e);
+        }
     }
 }
