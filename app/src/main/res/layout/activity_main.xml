@@ -3,54 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.gustavs.remotepccontroller.MainActivity">
 
-    <Button
-        android:text="@string/btn_connectViaBluetooth"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/btn_connectBluetooth"
-        android:onClick="connectViaBluetooth" />
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"/>
 
-    <Button
-        android:text="@string/btn_connectViaWiFiDirect"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_connectWiFiDirect"
-        android:onClick="connectViaWiFiDirect"
-        android:layout_below="@+id/btn_connectBluetooth"
-        android:layout_alignLeft="@+id/btn_connectBluetooth"
-        android:layout_alignStart="@+id/btn_connectBluetooth"
-        android:layout_alignRight="@+id/btn_connectBluetooth"
-        android:layout_alignEnd="@+id/btn_connectBluetooth" />
+        android:layout_below="@+id/toolbar"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"/>
 
-    <Button
-        android:text="@string/btn_connectViaWlan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_connectViaWLAN"
-        android:onClick="connectViaWlan"
-        android:layout_below="@+id/btn_connectWiFiDirect"
-        android:layout_alignLeft="@+id/btn_connectWiFiDirect"
-        android:layout_alignStart="@+id/btn_connectWiFiDirect"
-        android:layout_alignRight="@+id/btn_connectBluetooth"
-        android:layout_alignEnd="@+id/btn_connectBluetooth" />
-
-    <Button
-        android:text="@string/btn_scanQRCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_scanQRCode"
-        android:onClick="scanQRCode"
-        android:layout_above="@+id/btn_connectBluetooth"
-        android:layout_alignLeft="@+id/btn_connectBluetooth"
-        android:layout_alignStart="@+id/btn_connectBluetooth"
-        android:layout_alignRight="@+id/btn_connectBluetooth"
-        android:layout_alignEnd="@+id/btn_connectBluetooth" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/tab_layout"/>
 </RelativeLayout>
