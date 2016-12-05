@@ -37,6 +37,7 @@ public class ConnectBluetoothActivity extends ConnectActivity {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Device does not support Bluetooth", Toast.LENGTH_SHORT).show();
+            setIsConnected(false);
         }
         else if (!mBluetoothAdapter.isEnabled()) {
             promptToEnableBluetooth();
