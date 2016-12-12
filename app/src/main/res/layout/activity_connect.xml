@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.gustavs.remotepccontroller.MainActivity">
+    tools:context="com.example.gustavs.remotepccontroller.ConnectActivity">
 
     <Button
         android:layout_width="wrap_content"
@@ -99,4 +99,17 @@
         android:layout_toRightOf="@+id/ctrl_f5"
         android:layout_toEndOf="@+id/ctrl_f5"
         android:onClick="onButtonDown" />
+
+    <Button
+        android:text="Dim Screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="49dp"
+        android:id="@+id/btn_dim_screen"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onDimScreenClicked" />
 </RelativeLayout>

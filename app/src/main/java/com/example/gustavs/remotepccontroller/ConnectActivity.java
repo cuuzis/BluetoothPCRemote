@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 public abstract class ConnectActivity extends AppCompatActivity {
@@ -13,6 +14,7 @@ public abstract class ConnectActivity extends AppCompatActivity {
     private static final String TAG = ConnectActivity.class.getSimpleName();
     private boolean isThreadConnected = false;
     private ProgressDialog dialog;
+    private boolean screenOff = false;
 
     // Sends command string to server
     protected abstract void sendCommand(String command);
@@ -75,6 +77,19 @@ public abstract class ConnectActivity extends AppCompatActivity {
                 Log.e(TAG, "Invalid message");
                 break;
         }
+    }
+
+    protected void onDimScreenClicked(View v) {
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        if (screenOff) {
+            params.screenBrightness = -1;
+            screenOff = false;
+        } else {
+            params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+            params.screenBrightness = 0;
+            screenOff = true;
+        }
+        getWindow().setAttributes(params);
     }
 
     // Volume keys are mapped to arrows:
