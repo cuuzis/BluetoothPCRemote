@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace TrayIconBluetoothController
@@ -19,26 +19,33 @@ namespace TrayIconBluetoothController
             //this.notifyIcon1.Icon = new Icon("Resources/redBTicon.ico"); //((System.Drawing.Icon)(("redBTicon.ico")));
             //System.ComponentModel.ComponentResourceManager resources
 
-
-            /*WiFiDirectConnector wifiConnector = new WiFiDirectConnector(this);
-            Parallel.Invoke( () => {
-                    WlanConnector wlanConnector = new WlanConnector(this);
-                }, () => {
-                    BluetoothConnector btConnector = new BluetoothConnector(this);
-                }
-            );*/
-
-            string testMessage = "test post, please ignore!";
+            string testMessage = "CUZIS-PC;8001;cuzis-pc";
             this.qrCodePicturebox.Image = QRCodeGenerator.GenerateQRCode(testMessage, 180);
             this.qrCodePicturebox.Refresh();
-            
-            
+
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                WlanConnector wlanConnector = new WlanConnector(this);
+            }).Start();
+
+            new Thread(() => {
+                Thread.CurrentThread.IsBackground = true;
+                BluetoothConnector btConnector = new BluetoothConnector(this);
+            }).Start();
+
+            /*new Thread(() => {
+                Thread.CurrentThread.IsBackground = true;
+                WiFiDirectConnector wifiConnector = new WiFiDirectConnector(this);
+            }).Start();*/
+
+
         }
 
         // To hide the form in tray on startup
-        protected override void SetVisibleCore(bool value) {
+        /*protected override void SetVisibleCore(bool value) {
             base.SetVisibleCore(allowshowdisplay ? value : allowshowdisplay);
-        }
+        }*/
 
         private void Form1_Move(object sender, EventArgs e) {
             if (this.WindowState == FormWindowState.Minimized) {

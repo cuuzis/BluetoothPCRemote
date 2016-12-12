@@ -100,7 +100,7 @@ namespace TrayIconBluetoothController
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "System Tray";
+            this.Text = "Android Remote";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Move += new System.EventHandler(this.Form1_Move);
             this.contextMenuStrip1.ResumeLayout(false);

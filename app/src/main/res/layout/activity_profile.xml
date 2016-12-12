@@ -67,7 +67,7 @@
         android:layout_alignParentStart="true">
 
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/textView1"
+            android:id="@+id/txt_pc_hostname"
             android:hint="Computer's network name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,13 +83,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/textView2"
+            android:id="@+id/txt_pc_port"
             android:hint="TCP Port"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:inputType="number" />
     </android.support.design.widget.TextInputLayout>
 
     <TextView
@@ -110,7 +111,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/textView3"
+            android:id="@+id/txt_pc_blutooth_name"
             android:hint="Computer's Bluetooth name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

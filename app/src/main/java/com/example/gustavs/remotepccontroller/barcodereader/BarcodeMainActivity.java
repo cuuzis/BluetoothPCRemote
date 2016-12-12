@@ -28,6 +28,8 @@ import com.example.gustavs.remotepccontroller.R;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import static com.example.gustavs.remotepccontroller.barcodereader.BarcodeCaptureActivity.BarcodeObject;
+
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.
@@ -102,10 +104,17 @@ public class BarcodeMainActivity extends Activity implements View.OnClickListene
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                    Barcode barcode = data.getParcelableExtra(BarcodeObject);
                     statusMessage.setText(R.string.barcode_success);
                     barcodeValue.setText(barcode.displayValue);
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
+
+
+                    Intent ddata = new Intent();
+                    ddata.putExtra(BarcodeObject, barcode);
+                    setResult(CommonStatusCodes.SUCCESS, ddata);
+                    finish();
+
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
                     Log.d(TAG, "No barcode captured, intent data is null");
