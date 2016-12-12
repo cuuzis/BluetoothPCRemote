@@ -32,6 +32,7 @@
         <activity android:name="com.example.gustavs.remotepccontroller.bluetooth.ConnectBluetoothActivity" ></activity>
         <activity android:name="com.example.gustavs.remotepccontroller.wifidirect.ConnectWiFiDirectActivity" ></activity>
         <activity android:name="com.example.gustavs.remotepccontroller.wifi.ConnectWlanActivity" ></activity>
+        <activity android:name="com.example.gustavs.remotepccontroller.ProfileActivity" ></activity>
         <activity
             android:name=".barcodereader.BarcodeMainActivity"
             android:label="@string/title_activity_main" >
