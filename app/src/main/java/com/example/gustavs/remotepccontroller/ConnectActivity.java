@@ -43,7 +43,7 @@ public abstract class ConnectActivity extends AppCompatActivity {
 
 
     // Buttons are mapped to command strings by their IDs
-    protected void onButtonDown(View v) {
+    public void onButtonDown(View v) {
         if (!isThreadConnected) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
@@ -79,7 +79,7 @@ public abstract class ConnectActivity extends AppCompatActivity {
         }
     }
 
-    protected void onDimScreenClicked(View v) {
+    public void onDimScreenClicked(View v) {
         WindowManager.LayoutParams params = getWindow().getAttributes();
         if (screenOff) {
             params.screenBrightness = -1;

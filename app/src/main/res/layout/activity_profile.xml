@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.gustavs.remotepccontroller.ProfileActivity">
+    tools:context=".ProfileActivity">
 
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/profile_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
 
     <Button
         android:id="@+id/btn_connectViaWLAN"
         android:text="@string/btn_connectViaWlan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/profile_toolbar"
         android:onClick="connectViaWlan" />
 
     <Button
@@ -47,7 +56,6 @@
         android:onClick="scanQRCode" />
 
 
-
     <TextView
         android:id="@+id/lbl_wireless"
         android:layout_width="match_parent"
@@ -67,7 +75,7 @@
         android:layout_alignParentStart="true">
 
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/txt_pc_hostname"
+            android:id="@+id/et_wlanname"
             android:hint="Computer's network name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,7 +91,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/txt_pc_port"
+            android:id="@+id/et_wlanport"
             android:hint="TCP Port"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,7 +119,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/txt_pc_blutooth_name"
+            android:id="@+id/et_blutoothname"
             android:hint="Computer's Bluetooth name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

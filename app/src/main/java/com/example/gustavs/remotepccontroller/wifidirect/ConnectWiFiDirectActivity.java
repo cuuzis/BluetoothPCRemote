@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.example.gustavs.remotepccontroller.ConnectActivity;
-import com.example.gustavs.remotepccontroller.R;
 
 public class ConnectWiFiDirectActivity extends ConnectActivity {
 
@@ -38,13 +36,13 @@ public class ConnectWiFiDirectActivity extends ConnectActivity {
             @Override
             public void onSuccess() {
                 System.out.println("WiFi Direct discovering");
-                ((TextView) findViewById(R.id.connectionInfo) ).setText("Success discovery");
+                //((TextView) findViewById(R.id.connectionInfo) ).setText("Success discovery");
                 mManager.requestPeers(mChannel, myPeerListListener);
             }
             @Override
             public void onFailure(int reasonCode) {
                 System.out.println("Discovery errorcode:" + getResources().getString(reasonCode));
-                ((TextView) findViewById(R.id.connectionInfo) ).setText("Discovery errorcode:" + getResources().getString(reasonCode));
+                //((TextView) findViewById(R.id.connectionInfo) ).setText("Discovery errorcode:" + getResources().getString(reasonCode));
             }
         });
     }

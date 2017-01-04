@@ -18,4 +18,21 @@
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="btn_scanQRCode">Scan QR Code</string>
+    <string name="profile_deleted">Profile deleted!</string>
+    <string name="confirm_delete_profile">Delete profile?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="title">Title</string>
+    <string name="subtitle">Subtitle</string>
+    <string name="save">Save</string>
+    <string name="up_arrow">↑</string>
+    <string name="down_arrow">↓</string>
+    <string name="left_arrow">←</string>
+    <string name="right_arrow">→</string>
+    <string name="space">Space</string>
+    <string name="f5">F5</string>
+    <string name="ctrl_f5">ctrl + F5</string>
+    <string name="ctrl_l">CTRL + L</string>
+    <string name="dim_screen">Dim Screen</string>
+    <string name="edit">edit</string>
 </resources>

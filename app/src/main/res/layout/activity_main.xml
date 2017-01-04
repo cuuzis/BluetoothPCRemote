@@ -4,12 +4,21 @@
     tools:context="com.example.gustavs.remotepccontroller.MainActivity"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android.support.design="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/main_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
 
     <android.support.v7.widget.ListViewCompat xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/list_view_compat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/main_toolbar" />
 
     <android.support.design.widget.FloatingActionButton
         android.support.design:fabSize="normal"

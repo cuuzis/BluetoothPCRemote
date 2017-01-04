@@ -1,9 +1,16 @@
 package com.example.gustavs.remotepccontroller;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,19 +18,58 @@ import android.widget.Toast;
 import com.example.gustavs.remotepccontroller.barcodereader.BarcodeCaptureActivity;
 import com.example.gustavs.remotepccontroller.barcodereader.BarcodeMainActivity;
 import com.example.gustavs.remotepccontroller.bluetooth.ConnectBluetoothActivity;
+import com.example.gustavs.remotepccontroller.model.ProfileDataDbHelper;
 import com.example.gustavs.remotepccontroller.wifi.ConnectWlanActivity;
 import com.google.android.gms.vision.barcode.Barcode;
+
+import static android.provider.BaseColumns._ID;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.ALL_COLUMNS;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.TABLE_NAME;
+
 
 public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = ConnectActivity.class.getSimpleName();
     private static final int QR_CODE_VALUES = 2;
 
+    public static final String PROFILE_ID = "ProfileID";
+    private static final int EMPTY_ID = -1;
+    private long profileId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        Toolbar profileToolbar = (Toolbar) findViewById(R.id.profile_toolbar);
+        setSupportActionBar(profileToolbar);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null)
+            ab.setDisplayHomeAsUpEnabled(true);
+        else
+            throw new AssertionError("getSupportActionBar returned null");
 
+        //load bundle data
+        profileId = getIntent().getLongExtra(PROFILE_ID, EMPTY_ID);
+        if (profileId != EMPTY_ID) {
+            ProfileDataDbHelper mDbHelper = new ProfileDataDbHelper(this);
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
+            Cursor cursor = db.query(TABLE_NAME, ALL_COLUMNS, _ID+"="+profileId, null, null, null, null);
+            cursor.moveToFirst();
+            ((EditText)findViewById(R.id.et_wlanname)).setText(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANNAME)));
+            ((EditText)findViewById(R.id.et_wlanport)).setText(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANPORT)));
+            ((EditText)findViewById(R.id.et_blutoothname)).setText(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_BLUETOOTHNAME)));
+            cursor.close();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.profile_menu, menu);
+        return true;
     }
 
     public void connectViaBluetooth(View v) {
@@ -50,6 +96,45 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                saveProfile();
+                finish();
+                return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case android.R.id.title:
+                //show popup title editor
+                Toast.makeText(this, "Title clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void saveProfile() {                // TODO: button should only be enabled if input is valid
+        ProfileDataDbHelper mDbHelper = new ProfileDataDbHelper(this);
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        String wlanName = ((EditText)findViewById(R.id.et_wlanname)).getText().toString();
+        String wlanPort = ((EditText)findViewById(R.id.et_wlanport)).getText().toString();
+        String bluetoothName = ((EditText)findViewById(R.id.et_blutoothname)).getText().toString();
+        values.put(COLUMN_NAME_WLANNAME, wlanName);
+        values.put(COLUMN_NAME_WLANPORT, wlanPort);
+        values.put(COLUMN_NAME_BLUETOOTHNAME, bluetoothName);
+        if (profileId == EMPTY_ID) {
+            db.insert(TABLE_NAME, null, values);
+        } else {
+            db.update(TABLE_NAME, values, _ID+" = "+profileId, null);
+        }
+    }
+
+    //region scan QRcode
     public void scanQRCode(View v) {
         Intent i = new Intent(this, BarcodeMainActivity.class);
         startActivityForResult(i, QR_CODE_VALUES);
@@ -62,9 +147,9 @@ public class ProfileActivity extends AppCompatActivity {
             if (data != null) {
                 Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                 String[] values = decodeValues(barcode.displayValue);
-                ((EditText)findViewById(R.id.txt_pc_hostname)).setText(values[0]);
-                ((EditText)findViewById(R.id.txt_pc_port)).setText(values[1]);
-                ((EditText)findViewById(R.id.txt_pc_blutooth_name)).setText(values[2]);
+                ((EditText)findViewById(R.id.et_wlanname)).setText(values[0]);
+                ((EditText)findViewById(R.id.et_wlanport)).setText(values[1]);
+                ((EditText)findViewById(R.id.et_blutoothname)).setText(values[2]);
 
             } else {
                 Log.d(TAG, "No barcode captured, intent data is null");
@@ -85,4 +170,5 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
     }
+    //endregion
 }
