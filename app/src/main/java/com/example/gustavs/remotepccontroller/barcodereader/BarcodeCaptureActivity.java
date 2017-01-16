@@ -33,6 +33,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -45,6 +46,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.example.gustavs.remotepccontroller.barcodereader.ui.camera.CameraSource;
 import com.example.gustavs.remotepccontroller.barcodereader.ui.camera.CameraSourcePreview;
 import com.example.gustavs.remotepccontroller.barcodereader.ui.camera.GraphicOverlay;
+import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -59,7 +61,7 @@ import java.io.IOException;
  * size, and ID of each barcode.
  */
 public final class BarcodeCaptureActivity extends AppCompatActivity {
-    private static final String TAG = "Barcode-reader";
+    private static final String TAG = BarcodeCaptureActivity.class.getSimpleName();
 
     // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
@@ -68,13 +70,13 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
     private static final int RC_HANDLE_CAMERA_PERM = 2;
 
     // constants used to pass extra data in the intent
-    public static final String AutoFocus = "AutoFocus";
-    public static final String UseFlash = "UseFlash";
     public static final String BarcodeObject = "Barcode";
+
 
     private CameraSource mCameraSource;
     private CameraSourcePreview mPreview;
-    private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
+    //private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
+    private volatile Barcode myBarcode;
 
     // helper objects for detecting taps and pinches.
     private ScaleGestureDetector scaleGestureDetector;
@@ -89,11 +91,11 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         setContentView(R.layout.barcode_capture);
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-        mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
+        //mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
 
         // read parameters from the intent used to launch the activity.
-        boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
-        boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
+        boolean autoFocus = true;
+        boolean useFlash = false;
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -107,9 +109,9 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, "Tap to capture. Pinch/Stretch to zoom",
+        /*Snackbar.make(mGraphicOverlay, "Pinch/Stretch to zoom",
                 Snackbar.LENGTH_LONG)
-                .show();
+                .show();*/
     }
 
     /**
@@ -138,10 +140,10 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             }
         };
 
-        Snackbar.make(mGraphicOverlay, R.string.permission_camera_rationale,
+        /*Snackbar.make(mGraphicOverlay, R.string.permission_camera_rationale,
                 Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.ok, listener)
-                .show();
+                .show();*/
     }
 
     @Override
@@ -169,10 +171,21 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         // is set to receive the barcode detection results, track the barcodes, and maintain
         // graphics for each barcode on screen.  The factory is used by the multi-processor to
         // create a separate tracker instance for each barcode.
-        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).build();
-        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay);
+        /*BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).build();
+        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory();
+        barcodeDetector.setProcessor(
+                new MultiProcessor.Builder<>(barcodeFactory).build());*/
+
+        //my detector
+        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context)
+                .setBarcodeFormats(Barcode.QR_CODE)
+                .build();
+        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory();
         barcodeDetector.setProcessor(
                 new MultiProcessor.Builder<>(barcodeFactory).build());
+        Log.d(TAG, "Factory built");
+
+
 
         if (!barcodeDetector.isOperational()) {
             // Note: The first time that an app using the barcode or face API is installed on a
@@ -277,8 +290,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // we have permission, so create the camerasource
-            boolean autoFocus = getIntent().getBooleanExtra(AutoFocus,false);
-            boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
+            boolean autoFocus = true;
+            boolean useFlash = false;
             createCameraSource(autoFocus, useFlash);
             return;
         }
@@ -316,7 +329,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
 
         if (mCameraSource != null) {
             try {
-                mPreview.start(mCameraSource, mGraphicOverlay);
+                mPreview.start(mCameraSource);
             } catch (IOException e) {
                 Log.e(TAG, "Unable to start camera source.", e);
                 mCameraSource.release();
@@ -334,7 +347,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
      */
     private boolean onTap(float rawX, float rawY) {
         // Find tap point in preview frame coordinates.
-        int[] location = new int[2];
+        /*int[] location = new int[2];
         mGraphicOverlay.getLocationOnScreen(location);
         float x = (rawX - location[0]) / mGraphicOverlay.getWidthScaleFactor();
         float y = (rawY - location[1]) / mGraphicOverlay.getHeightScaleFactor();
@@ -364,7 +377,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             setResult(CommonStatusCodes.SUCCESS, data);
             finish();
             return true;
-        }
+        }*/
         return false;
     }
 

@@ -16,13 +16,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.gustavs.remotepccontroller.barcodereader.BarcodeCaptureActivity;
-import com.example.gustavs.remotepccontroller.barcodereader.BarcodeMainActivity;
+import com.example.gustavs.remotepccontroller.barcodereader.MyBarcodeActivity;
 import com.example.gustavs.remotepccontroller.bluetooth.ConnectBluetoothActivity;
 import com.example.gustavs.remotepccontroller.model.ProfileDataDbHelper;
 import com.example.gustavs.remotepccontroller.wifi.ConnectWlanActivity;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import static android.provider.BaseColumns._ID;
+import static com.example.gustavs.remotepccontroller.barcodereader.BarcodeCaptureActivity.BarcodeObject;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.ALL_COLUMNS;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
@@ -33,7 +35,7 @@ import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEn
 public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = ConnectActivity.class.getSimpleName();
-    private static final int QR_CODE_VALUES = 2;
+    private static final int RC_BARCODE_CAPTURE = 9001;
 
     public static final String PROFILE_ID = "ProfileID";
     private static final int EMPTY_ID = -1;
@@ -136,25 +138,36 @@ public class ProfileActivity extends AppCompatActivity {
 
     //region scan QRcode
     public void scanQRCode(View v) {
-        Intent i = new Intent(this, BarcodeMainActivity.class);
-        startActivityForResult(i, QR_CODE_VALUES);
-        //startActivity(i);
+        //Intent i = new Intent(this, BarcodeMainActivity.class);
+        //startActivityForResult(i, QR_CODE_VALUES);
+
+        //Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+        Intent intent = new Intent(this, MyBarcodeActivity.class);
+
+        startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == QR_CODE_VALUES){
-            if (data != null) {
-                Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                String[] values = decodeValues(barcode.displayValue);
-                ((EditText)findViewById(R.id.et_wlanname)).setText(values[0]);
-                ((EditText)findViewById(R.id.et_wlanport)).setText(values[1]);
-                ((EditText)findViewById(R.id.et_blutoothname)).setText(values[2]);
+        if (requestCode == RC_BARCODE_CAPTURE) {
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
+                    Barcode barcode = data.getParcelableExtra(BarcodeObject);
+                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
 
+                    String[] values = decodeValues(barcode.displayValue);
+                    ((EditText)findViewById(R.id.et_wlanname)).setText(values[0]);
+                    ((EditText)findViewById(R.id.et_wlanport)).setText(values[1]);
+                    ((EditText)findViewById(R.id.et_blutoothname)).setText(values[2]);
+
+                } else {
+                    Log.d(TAG, "No barcode captured, intent data is null");
+                }
             } else {
-                Log.d(TAG, "No barcode captured, intent data is null");
+                Log.e(TAG, "Barcode read error: " + CommonStatusCodes.getStatusCodeString(resultCode));
             }
-        } else {
+        }
+        else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -162,7 +175,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String[] decodeValues(String displayValue) {
         String[] result = displayValue.split(";");
         if (result.length < 3) {
-            Log.d(TAG, "Bad QR Code");
+            Log.e(TAG, "Bad QR Code");
             String[] badresult = {"", "", ""};
             return badresult;
         } else {

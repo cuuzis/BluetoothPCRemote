@@ -27,7 +27,7 @@ import com.google.android.gms.vision.barcode.Barcode;
  * Graphic instance for rendering barcode position, size, and ID within an associated graphic
  * overlay view.
  */
-public class BarcodeGraphic extends GraphicOverlay.Graphic {
+public class BarcodeGraphic {//extends GraphicOverlay.Graphic {
 
     private int mId;
 
@@ -44,7 +44,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     private volatile Barcode mBarcode;
 
     BarcodeGraphic(GraphicOverlay overlay) {
-        super(overlay);
+        //super(overlay);
 
         mCurrentColorIndex = (mCurrentColorIndex + 1) % COLOR_CHOICES.length;
         final int selectedColor = COLOR_CHOICES[mCurrentColorIndex];
@@ -75,15 +75,15 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
      * Updates the barcode instance from the detection of the most recent frame.  Invalidates the
      * relevant portions of the overlay to trigger a redraw.
      */
-    void updateItem(Barcode barcode) {
+    private void updateItem(Barcode barcode) {
         mBarcode = barcode;
-        postInvalidate();
+        //postInvalidate();
     }
 
     /**
      * Draws the barcode annotations for position, size, and raw value on the supplied canvas.
      */
-    @Override
+    /*@Override
     public void draw(Canvas canvas) {
         Barcode barcode = mBarcode;
         if (barcode == null) {
@@ -100,5 +100,5 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
 
         // Draws a label at the bottom of the barcode indicate the barcode value that was detected.
         canvas.drawText(barcode.rawValue, rect.left, rect.bottom, mTextPaint);
-    }
+    }*/
 }

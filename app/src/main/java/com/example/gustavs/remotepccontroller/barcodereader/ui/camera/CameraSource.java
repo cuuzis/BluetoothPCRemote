@@ -1202,6 +1202,7 @@ public class CameraSource {
                 // frame.
 
                 try {
+                    //Log.d(TAG, "Sending frame from thread");
                     mDetector.receiveFrame(outputFrame);
                 } catch (Throwable t) {
                     Log.e(TAG, "Exception thrown from receiver.", t);
