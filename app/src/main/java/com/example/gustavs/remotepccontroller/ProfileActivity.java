@@ -15,8 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.gustavs.remotepccontroller.barcodereader.BarcodeCaptureActivity;
-import com.example.gustavs.remotepccontroller.barcodereader.MyBarcodeActivity;
+import com.example.gustavs.remotepccontroller.barcodereader.BarcodeActivity;
 import com.example.gustavs.remotepccontroller.bluetooth.ConnectBluetoothActivity;
 import com.example.gustavs.remotepccontroller.model.ProfileDataDbHelper;
 import com.example.gustavs.remotepccontroller.wifi.ConnectWlanActivity;
@@ -24,7 +23,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import static android.provider.BaseColumns._ID;
-import static com.example.gustavs.remotepccontroller.barcodereader.BarcodeCaptureActivity.BarcodeObject;
+import static com.example.gustavs.remotepccontroller.barcodereader.BarcodeActivity.BarcodeObject;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.ALL_COLUMNS;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
@@ -142,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity {
         //startActivityForResult(i, QR_CODE_VALUES);
 
         //Intent intent = new Intent(this, BarcodeCaptureActivity.class);
-        Intent intent = new Intent(this, MyBarcodeActivity.class);
+        Intent intent = new Intent(this, BarcodeActivity.class);
 
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }

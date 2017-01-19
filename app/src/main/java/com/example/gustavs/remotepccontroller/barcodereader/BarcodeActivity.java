@@ -1,19 +1,17 @@
 package com.example.gustavs.remotepccontroller.barcodereader;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.SurfaceView;
 
 import com.example.gustavs.remotepccontroller.R;
-import com.example.gustavs.remotepccontroller.barcodereader.ui.camera.CameraSourcePreview;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -24,28 +22,69 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
-import static com.example.gustavs.remotepccontroller.barcodereader.BarcodeCaptureActivity.BarcodeObject;
+//TODO: Add text saying "Please scan QR code from PC screen"
+public class BarcodeActivity extends AppCompatActivity {
+    private static final String TAG = BarcodeActivity.class.getSimpleName();
+    public static final String BarcodeObject = "Barcode";
 
-public class MyBarcodeActivity extends AppCompatActivity {
-    private static final String TAG = MyBarcodeActivity.class.getSimpleName();
+    private static final float PREVIEW_FPS = 15.0f;
 
     private CameraSource mCameraSource;
-    private CameraSourcePreview mPreview;
+    private CameraPreview mPreview;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.barcode_capture);
+        setContentView(R.layout.activity_barcode);
+        createCameraSource();
+        startCameraSource();
+    }
 
+    /**
+     * Restarts the camera.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startCameraSource();
+    }
 
+    /**
+     * Stops the camera.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mPreview != null) {
+            mPreview.stop();
+        }
+    }
+
+    /**
+     * Releases the resources associated with the camera source, the associated detectors, and the
+     * rest of the processing pipeline.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mPreview != null) {
+            mPreview.release();
+        }
+    }
+
+    /**
+     * Creates a camera source with QR tag detector attached
+     */
+    private void createCameraSource() {
         Context context = getApplicationContext();
-        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).build();
+        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context)
+                .setBarcodeFormats(Barcode.QR_CODE)
+                .build();
         barcodeDetector.setProcessor(new FocusingProcessor<Barcode>(barcodeDetector, new Tracker<Barcode>()) {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 if (detections != null) {
                     SparseArray<Barcode> barcodes = detections.getDetectedItems();
-
                     if (barcodes != null && barcodes.size() > 0) {
                         int key = barcodes.keyAt(0);
                         Barcode best = barcodes.get(key);
@@ -59,20 +98,26 @@ public class MyBarcodeActivity extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public int selectFocus(Detector.Detections<Barcode> detections) {
                 return 0;
             }
         });
 
-        CameraSource mCameraSource = new CameraSource.Builder(context, barcodeDetector)
+        Point displaySize = new Point();
+        getWindowManager().getDefaultDisplay().getSize(displaySize);
+
+        mCameraSource = new CameraSource.Builder(context, barcodeDetector)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
-                .setRequestedPreviewSize(1600, 1024)
-                .setRequestedFps(15.0f)
+                .setRequestedPreviewSize(displaySize.x, displaySize.y)
+                .setAutoFocusEnabled(true)
+                .setRequestedFps(PREVIEW_FPS)
                 .build();
 
-        CameraSourcePreview mPreview = (CameraSourcePreview) findViewById(R.id.preview);
+    }
+
+
+    private void startCameraSource() {
         if (mCameraSource != null) {
             try {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -85,33 +130,13 @@ public class MyBarcodeActivity extends AppCompatActivity {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                //mPreview.start(mCameraSource);
-                mCameraSource.start();
+                mPreview = (CameraPreview) findViewById(R.id.cameraPreview);
+                mPreview.start(mCameraSource);
             } catch (IOException e) {
                 Log.e(TAG, "Unable to start camera source.", e);
                 mCameraSource.release();
                 mCameraSource = null;
             }
         }
-
-        /*mPreview = (CameraSourcePreview) findViewById(R.id.preview);
-        //mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
-
-        // read parameters from the intent used to launch the activity.
-        boolean autoFocus = true;
-        boolean useFlash = false;
-
-        // Check for the camera permission before accessing the camera.  If the
-        // permission is not granted yet, request permission.
-        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        if (rc == PackageManager.PERMISSION_GRANTED) {
-            createCameraSource(autoFocus, useFlash);
-        } else {
-            requestCameraPermission();
-        }
-
-        gestureDetector = new GestureDetector(this, new CaptureGestureListener());
-        scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
-*/
     }
 }

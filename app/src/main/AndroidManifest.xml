@@ -22,20 +22,29 @@
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
-        <activity android:name="com.example.gustavs.remotepccontroller.MainActivity" android:screenOrientation="portrait">
+        <activity
+            android:name="com.example.gustavs.remotepccontroller.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.gustavs.remotepccontroller.bluetooth.ConnectBluetoothActivity" ></activity>
-        <activity android:name="com.example.gustavs.remotepccontroller.wifidirect.ConnectWiFiDirectActivity" ></activity>
-        <activity android:name="com.example.gustavs.remotepccontroller.wifi.ConnectWlanActivity" ></activity>
-        <activity android:name="com.example.gustavs.remotepccontroller.ProfileActivity" ></activity>
-        <activity android:name=".barcodereader.MyBarcodeActivity"></activity>
-        <activity android:name=".barcodereader.BarcodeCaptureActivity"
-            android:label="Read Barcode"/>
+        <activity
+            android:name="com.example.gustavs.remotepccontroller.bluetooth.ConnectBluetoothActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.example.gustavs.remotepccontroller.wifidirect.ConnectWiFiDirectActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.example.gustavs.remotepccontroller.wifi.ConnectWlanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.example.gustavs.remotepccontroller.ProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".barcodereader.BarcodeActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
