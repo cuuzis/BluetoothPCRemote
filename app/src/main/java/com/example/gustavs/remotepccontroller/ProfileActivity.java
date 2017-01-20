@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.gustavs.remotepccontroller.barcodereader.BarcodeActivity;
@@ -25,6 +27,8 @@ import com.google.android.gms.vision.barcode.Barcode;
 import static android.provider.BaseColumns._ID;
 import static com.example.gustavs.remotepccontroller.barcodereader.BarcodeActivity.BarcodeObject;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.ALL_COLUMNS;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_FIRST_PRIORITY;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_SECOND_PRIORITY;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
@@ -52,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         else
             throw new AssertionError("getSupportActionBar returned null");
 
-        //load bundle data
+        // Loads bundle data (stored values)
         profileId = getIntent().getLongExtra(PROFILE_ID, EMPTY_ID);
         if (profileId != EMPTY_ID) {
             ProfileDataDbHelper mDbHelper = new ProfileDataDbHelper(this);
@@ -62,6 +66,8 @@ public class ProfileActivity extends AppCompatActivity {
             ((EditText)findViewById(R.id.et_wlanname)).setText(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANNAME)));
             ((EditText)findViewById(R.id.et_wlanport)).setText(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANPORT)));
             ((EditText)findViewById(R.id.et_blutoothname)).setText(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_BLUETOOTHNAME)));
+            ((RadioGroup)findViewById(R.id.rg_first_priority)).check(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_FIRST_PRIORITY)));
+            ((RadioGroup)findViewById(R.id.rg_second_priority)).check(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_SECOND_PRIORITY)));
             cursor.close();
         }
     }
@@ -108,7 +114,7 @@ public class ProfileActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case android.R.id.title:
-                //show popup title editor
+                //TODO:show popup title editor
                 Toast.makeText(this, "Title clicked", Toast.LENGTH_SHORT).show();
                 return true;
             default:
@@ -122,12 +128,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         ContentValues values = new ContentValues();
 
-        String wlanName = ((EditText)findViewById(R.id.et_wlanname)).getText().toString();
-        String wlanPort = ((EditText)findViewById(R.id.et_wlanport)).getText().toString();
-        String bluetoothName = ((EditText)findViewById(R.id.et_blutoothname)).getText().toString();
+        final String wlanName = ((EditText)findViewById(R.id.et_wlanname)).getText().toString();
+        final String wlanPort = ((EditText)findViewById(R.id.et_wlanport)).getText().toString();
+        final String bluetoothName = ((EditText)findViewById(R.id.et_blutoothname)).getText().toString();
+        final int firstPriority = ((RadioGroup)findViewById(R.id.rg_first_priority)).getCheckedRadioButtonId();
+        final int secondPriority = ((RadioGroup)findViewById(R.id.rg_second_priority)).getCheckedRadioButtonId();
         values.put(COLUMN_NAME_WLANNAME, wlanName);
         values.put(COLUMN_NAME_WLANPORT, wlanPort);
         values.put(COLUMN_NAME_BLUETOOTHNAME, bluetoothName);
+        values.put(COLUMN_NAME_FIRST_PRIORITY, firstPriority);
+        values.put(COLUMN_NAME_SECOND_PRIORITY, secondPriority);
         if (profileId == EMPTY_ID) {
             db.insert(TABLE_NAME, null, values);
         } else {
@@ -137,12 +147,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     //region scan QRcode
     public void scanQRCode(View v) {
-        //Intent i = new Intent(this, BarcodeMainActivity.class);
-        //startActivityForResult(i, QR_CODE_VALUES);
-
-        //Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         Intent intent = new Intent(this, BarcodeActivity.class);
-
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
 
@@ -183,4 +188,20 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
     //endregion
+
+    // Ensures 1st and 2nd connection priorities are not the same
+    public void onPriorityChecked(View view) {
+        if (view.getId() == R.id.rb_first_priority_wlan)
+            if (((RadioButton)findViewById(R.id.rb_second_priority_wlan)).isChecked())
+                ((RadioGroup)findViewById(R.id.rg_second_priority)).check(R.id.rb_second_priority_btooth);
+        if (view.getId() == R.id.rb_first_priority_btooth)
+            if (((RadioButton)findViewById(R.id.rb_second_priority_btooth)).isChecked())
+                ((RadioGroup)findViewById(R.id.rg_second_priority)).check(R.id.rb_second_priority_wlan);
+        if (view.getId() == R.id.rb_second_priority_wlan)
+            if (((RadioButton)findViewById(R.id.rb_first_priority_wlan)).isChecked())
+                ((RadioGroup)findViewById(R.id.rg_first_priority)).check(R.id.rb_first_priority_btooth);
+        if (view.getId() == R.id.rb_second_priority_btooth)
+            if (((RadioButton)findViewById(R.id.rb_first_priority_btooth)).isChecked())
+                ((RadioGroup)findViewById(R.id.rg_first_priority)).check(R.id.rb_first_priority_wlan);
+    }
 }

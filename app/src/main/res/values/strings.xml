@@ -35,4 +35,13 @@
     <string name="ctrl_l">CTRL + L</string>
     <string name="dim_screen">Dim Screen</string>
     <string name="edit">edit</string>
+    <string name="wlan">Wlan</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="none">None</string>
+    <string name="wireless">Wireless</string>
+    <string name="computers_network_name">Computer\'s network name</string>
+    <string name="tcp_port">TCP Port</string>
+    <string name="computers_bluetooth_name">Computer\'s Bluetooth name</string>
+    <string name="connection_2nd_priority">Connection 2nd priority:</string>
+    <string name="connection_1st_priority">Connection 1st priority:</string>
 </resources>

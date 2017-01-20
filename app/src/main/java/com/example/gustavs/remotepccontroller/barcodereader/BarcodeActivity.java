@@ -22,7 +22,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
-//TODO: Add text saying "Please scan QR code from PC screen"
+//TODO: Add text saying "Please scan QR code from PC screen"; Validate Barcode before exit!
 public class BarcodeActivity extends AppCompatActivity {
     private static final String TAG = BarcodeActivity.class.getSimpleName();
     public static final String BarcodeObject = "Barcode";

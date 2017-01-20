@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_FIRST_PRIORITY;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_SECOND_PRIORITY;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.TABLE_NAME;
@@ -18,13 +20,16 @@ public class ProfileDataDbHelper extends SQLiteOpenHelper {
 
 
     private static final String TEXT_TYPE = " TEXT";
+    private static final String INT_TYPE = " INTEGER";
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     ProfileData.ProfileEntry._ID + " INTEGER PRIMARY KEY," +
                     COLUMN_NAME_WLANNAME + TEXT_TYPE + COMMA_SEP +
                     COLUMN_NAME_WLANPORT + TEXT_TYPE + COMMA_SEP +
-                    COLUMN_NAME_BLUETOOTHNAME + TEXT_TYPE + " )";
+                    COLUMN_NAME_BLUETOOTHNAME + TEXT_TYPE + COMMA_SEP +
+                    COLUMN_NAME_FIRST_PRIORITY + INT_TYPE + COMMA_SEP +
+                    COLUMN_NAME_SECOND_PRIORITY + INT_TYPE + " )";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
