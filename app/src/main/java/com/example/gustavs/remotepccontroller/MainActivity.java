@@ -48,19 +48,6 @@ public class MainActivity extends AppCompatActivity {
         profileAdapter = new ProfileCursorAdapter(this, profileCursor);
         ListViewCompat listView = (ListViewCompat) findViewById(R.id.list_view_compat);
         listView.setAdapter(profileAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                editProfile(id);
-            }
-        });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                deleteProfile(id);
-                return true;
-            }
-        });
     }
 
     private Cursor queryAllProfiles() {
@@ -125,11 +112,42 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
-            String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANNAME))
+            // Profile name and information
+            final long id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
+            final String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANNAME))
                     + ":" + cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANPORT));
-            ((TextView)view.findViewById(R.id.title)).setText(title);
-            String subtitle = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_BLUETOOTHNAME));
-            ((TextView)view.findViewById(R.id.subtitle)).setText(subtitle);
+            ((TextView)view.findViewById(R.id.listitem_title)).setText(title);
+            final String subtitle = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_BLUETOOTHNAME));
+            ((TextView)view.findViewById(R.id.listitem_subtitle)).setText(subtitle);
+
+            // Short click actions
+            View.OnClickListener mOnItemIconClick = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editProfile(id);//TODO: connect profile
+                }
+            };
+            View.OnClickListener mOnItemTextClick = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editProfile(id);
+                }
+            };
+            view.findViewById(R.id.listitem_connect).setOnClickListener(mOnItemIconClick);
+            view.findViewById(R.id.listitem_title).setOnClickListener(mOnItemTextClick);
+            view.findViewById(R.id.listitem_subtitle).setOnClickListener(mOnItemTextClick);
+
+            // Long click actions
+            View.OnLongClickListener mOnItemLongClick = new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    deleteProfile(id);
+                    return false;
+                }
+            };
+            view.findViewById(R.id.listitem_connect).setOnLongClickListener(mOnItemLongClick);
+            view.findViewById(R.id.listitem_title).setOnLongClickListener(mOnItemLongClick);
+            view.findViewById(R.id.listitem_subtitle).setOnLongClickListener(mOnItemLongClick);
         }
 
     }

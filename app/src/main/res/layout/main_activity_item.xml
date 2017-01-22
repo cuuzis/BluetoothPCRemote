@@ -1,38 +1,51 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dp" >
+    android:layout_height="72dp">
 
     <ImageView
-        android:id="@+id/editicon"
+        android:id="@+id/listitem_connect"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/edit"
-        android:src="@drawable/ic_mode_edit_black_24dp"/>
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/editicon"
-        android:layout_toEndOf="@id/editicon"
-        android:gravity="center_vertical"
-        android:text="@string/title"
-        android:textSize="16sp" />
+        android:padding="24dp"
+        android:contentDescription="@string/connect"
+        android:src="@drawable/ic_phonelink_ring_black_24dp"/>
 
     <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="fill_parent"
-        android:layout_height="26dip"
+        android:id="@+id/listitem_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="72dp"
+        android:paddingLeft="16dp"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/editicon"
-        android:layout_toEndOf="@id/editicon"
-        android:ellipsize="marquee"
+        android:layout_marginBottom="36dp"
+        android:text="@string/title"
+        android:textSize="16sp"
+        android:textColor="@android:color/primary_text_light"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:gravity="bottom"/>
+
+    <TextView
+        android:id="@+id/listitem_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="72dp"
+        android:paddingLeft="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="36dp"
         android:text="@string/subtitle"
-        android:textSize="12sp" />
+        android:textSize="14sp"
+        android:textColor="@android:color/secondary_text_light"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:gravity="top"/>
+
+    <View android:id="@+id/listitem_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:drawable/divider_horizontal_bright" />
 
 </RelativeLayout>

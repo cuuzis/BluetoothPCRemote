@@ -44,4 +44,5 @@
     <string name="computers_bluetooth_name">Computer\'s Bluetooth name</string>
     <string name="connection_2nd_priority">Connection 2nd priority:</string>
     <string name="connection_1st_priority">Connection 1st priority:</string>
+    <string name="connect">connect</string>
 </resources>

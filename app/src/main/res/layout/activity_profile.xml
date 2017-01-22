@@ -127,7 +127,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:inputType="number" />
+            android:inputType="number"
+            android:maxLength="5"/>
     </android.support.design.widget.TextInputLayout>
 
     <TextView
