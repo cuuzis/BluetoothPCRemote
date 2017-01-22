@@ -15,26 +15,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gustavs.remotepccontroller.model.ProfileDataDbHelper;
 
 import static android.provider.BaseColumns._ID;
-import static com.example.gustavs.remotepccontroller.ProfileActivity.PROFILE_ID;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.ALL_COLUMNS;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_FIRST_PRIORITY;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_SECOND_PRIORITY;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.TABLE_NAME;
 
 
 //TODO: lost connection on portrait<->landscape change; no connection establishes if bluetooth is not already on; icon
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private ProfileCursorAdapter profileAdapter;
+    public static final String PROFILE_ID = "ProfileID";
+    private ProfileCursorAdapter mProfileAdapter;
+    private ProfileDataDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,24 +43,19 @@ public class MainActivity extends AppCompatActivity {
         Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
 
-        // bind data to listView
-        Cursor profileCursor = queryAllProfiles();
-        profileAdapter = new ProfileCursorAdapter(this, profileCursor);
+        mDbHelper = new ProfileDataDbHelper(this);
+        // bind profile data to listView
+        mProfileAdapter = new ProfileCursorAdapter(this, mDbHelper.queryAllProfiles());
         ListViewCompat listView = (ListViewCompat) findViewById(R.id.list_view_compat);
-        listView.setAdapter(profileAdapter);
+        listView.setAdapter(mProfileAdapter);
     }
 
-    private Cursor queryAllProfiles() {
-        ProfileDataDbHelper mDbHelper = new ProfileDataDbHelper(this);
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        return db.query(TABLE_NAME, ALL_COLUMNS, null, null, null, null, null);
-    }
 
     @Override
     public void onResume() {
         super.onResume();
-        profileAdapter.changeCursor(queryAllProfiles());
-        profileAdapter.notifyDataSetChanged();
+        mProfileAdapter.changeCursor(mDbHelper.queryAllProfiles());
+        mProfileAdapter.notifyDataSetChanged();
     }
 
     private void editProfile(long profileId) {
@@ -82,12 +77,10 @@ public class MainActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Log.d(TAG, "Deleting profile"+profileId);
-                        ProfileDataDbHelper mDbHelper = new ProfileDataDbHelper(MainActivity.this);
-                        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-                        db.delete(TABLE_NAME, _ID+" = "+profileId, null);
-                        profileAdapter.changeCursor(queryAllProfiles());
-                        profileAdapter.notifyDataSetChanged();
+                        Log.d(TAG, "Deleting profile...");
+                        mDbHelper.deleteProfile(profileId);
+                        mProfileAdapter.changeCursor(mDbHelper.queryAllProfiles());
+                        mProfileAdapter.notifyDataSetChanged();
                         Toast.makeText(MainActivity.this, R.string.profile_deleted, Toast.LENGTH_SHORT).show(); //TODO: Snackbar with undo
                     }
                 })
@@ -114,17 +107,20 @@ public class MainActivity extends AppCompatActivity {
         public void bindView(View view, Context context, Cursor cursor) {
             // Profile name and information
             final long id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
-            final String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANNAME))
-                    + ":" + cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANPORT));
-            ((TextView)view.findViewById(R.id.listitem_title)).setText(title);
-            final String subtitle = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_BLUETOOTHNAME));
-            ((TextView)view.findViewById(R.id.listitem_subtitle)).setText(subtitle);
+            final String wlanName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANNAME));
+            final int wlanPort = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANPORT));
+            final String bluetoothName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_BLUETOOTHNAME));
+            //final int firstPriority = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_FIRST_PRIORITY));
+            //final int secondPriority = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_SECOND_PRIORITY));
+
+            ((TextView)view.findViewById(R.id.listitem_title)).setText(wlanName + ":" + wlanPort);
+            ((TextView)view.findViewById(R.id.listitem_subtitle)).setText(bluetoothName);
 
             // Short click actions
             View.OnClickListener mOnItemIconClick = new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    editProfile(id);//TODO: connect profile
+                    connectProfile(id);
                 }
             };
             View.OnClickListener mOnItemTextClick = new View.OnClickListener() {
@@ -149,7 +145,11 @@ public class MainActivity extends AppCompatActivity {
             view.findViewById(R.id.listitem_title).setOnLongClickListener(mOnItemLongClick);
             view.findViewById(R.id.listitem_subtitle).setOnLongClickListener(mOnItemLongClick);
         }
-
     }
+
+    //region connect
+    private void connectProfile(long profileId) {
+    }
+    //endregion
 
 }

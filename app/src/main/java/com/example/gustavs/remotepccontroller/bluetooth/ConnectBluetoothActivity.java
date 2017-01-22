@@ -9,30 +9,37 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.gustavs.remotepccontroller.ConnectActivity;
+import com.example.gustavs.remotepccontroller.AbstractConnectActivity;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
 
-public class ConnectBluetoothActivity extends ConnectActivity {
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
+
+public class ConnectBluetoothActivity extends AbstractConnectActivity {
 
     private static final String TAG = ConnectBluetoothActivity.class.getSimpleName();
     private final int REQUEST_ENABLE_BT = 1;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothDevice mmDevice;
-    //private ConnectBluetoothThread connectBluetoothThread;
 
     private ConnectBluetoothTask connectBluetoothTask;
     private BluetoothSocket mmSocket;
     private OutputStream mmOutStream;
     private final static UUID GUID = UUID.fromString("d07c0736-07b9-4ec5-b876-53647c4d047b"); // used in server
+    private String mHostName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mHostName = getIntent().getStringExtra(COLUMN_NAME_BLUETOOTHNAME);
+        if (mHostName == null) {
+            Log.e(TAG,"Profile information not passed");
+            setIsConnected(false);
+        }
         //Check bluetooth status
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
@@ -49,7 +56,6 @@ public class ConnectBluetoothActivity extends ConnectActivity {
 
     @Override
     protected void sendCommand(String command) {
-        //connectBluetoothThread.write(command);
         connectBluetoothTask.write(command);
     }
 
@@ -66,8 +72,8 @@ public class ConnectBluetoothActivity extends ConnectActivity {
             for (BluetoothDevice device : pairedDevices) {
                 // Add the name and address to an array adapter to show in a ListView
                 Log.i(TAG, device.getName() + " @ " + device.getAddress());
-                // TODO: remove hardcoded device name and scan for devices
-                if (device.getName().equals("CUZIS-PC")) {
+                // TODO: scan for unpaired devices
+                if (device.getName().equals(mHostName)) {
                     mmDevice = device;
                     break;
                 }

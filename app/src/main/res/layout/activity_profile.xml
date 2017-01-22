@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/wireless"
-        android:layout_below="@+id/rg_second_priority"
+        android:layout_below="@+id/btn_scanQRCode"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
@@ -158,15 +158,24 @@
             android:layout_alignParentStart="true" />
     </android.support.design.widget.TextInputLayout>
 
-
     <Button
         android:id="@+id/btn_scanQRCode"
         android:text="@string/btn_scanQRCode"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_input_layout3"
+        android:layout_below="@+id/rg_second_priority"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="scanQRCode" />
+
+    <Button
+        android:id="@+id/btn_connect"
+        android:text="@string/connect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="connect"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

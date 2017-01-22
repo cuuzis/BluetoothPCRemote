@@ -6,9 +6,9 @@ import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 
-import com.example.gustavs.remotepccontroller.ConnectActivity;
+import com.example.gustavs.remotepccontroller.AbstractConnectActivity;
 
-public class ConnectWiFiDirectActivity extends ConnectActivity {
+public class ConnectWiFiDirectActivity extends AbstractConnectActivity {
 
     WifiP2pManager mManager;
     WifiP2pManager.Channel mChannel;

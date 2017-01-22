@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public abstract class ConnectActivity extends AppCompatActivity {
+public abstract class AbstractConnectActivity extends AppCompatActivity {
 
-    private static final String TAG = ConnectActivity.class.getSimpleName();
+    private static final String TAG = AbstractConnectActivity.class.getSimpleName();
     private boolean isThreadConnected = false;
     private ProgressDialog dialog;
     private boolean screenOff = false;
