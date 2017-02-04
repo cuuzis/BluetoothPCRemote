@@ -18,9 +18,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gustavs.remotepccontroller.model.Profile;
 import com.example.gustavs.remotepccontroller.model.ProfileDataDbHelper;
 
-import static android.provider.BaseColumns._ID;
+import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry._ID;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_FIRST_PRIORITY;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_SECOND_PRIORITY;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         mProfileAdapter.notifyDataSetChanged();
     }
 
-    private void editProfile(long profileId) {
+    private void editProfile(int profileId) {
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(PROFILE_ID, profileId);
         startActivity(intent);
@@ -93,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private void connectProfile(int profileId) {
+        Profile profile = new Profile(this, profileId);
+        profile.connect(this);
+    }
+
     public class ProfileCursorAdapter extends CursorAdapter {
         private ProfileCursorAdapter(Context context, Cursor cursor) {
             super(context, cursor, 0);
@@ -106,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
             // Profile name and information
-            final long id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID));
+            final int id = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
             final String wlanName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANNAME));
             final int wlanPort = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_WLANPORT));
             final String bluetoothName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_BLUETOOTHNAME));
@@ -146,10 +152,5 @@ public class MainActivity extends AppCompatActivity {
             view.findViewById(R.id.listitem_subtitle).setOnLongClickListener(mOnItemLongClick);
         }
     }
-
-    //region connect
-    private void connectProfile(long profileId) {
-    }
-    //endregion
 
 }
