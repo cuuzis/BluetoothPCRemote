@@ -1,14 +1,9 @@
 package com.example.gustavs.remotepccontroller.model;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
-
-import com.example.gustavs.remotepccontroller.bluetooth.ConnectBluetoothActivity;
 
 import static com.example.gustavs.remotepccontroller.ProfileActivity.EMPTY_ID;
 import static com.example.gustavs.remotepccontroller.R.id.rb_first_priority_wlan;
@@ -23,6 +18,8 @@ import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEn
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.TABLE_NAME;
 
 public class Profile {
+
+    private static final int DEFAULT_PORT = 8001;
 
     private int id;
     private String wlanName;
@@ -46,16 +43,12 @@ public class Profile {
     }
 
     public Profile() {
+        this.id = EMPTY_ID;
         this.wlanName = "";
-        this.wlanPort = 8001;
+        this.wlanPort = DEFAULT_PORT;
         this.bluetoothName = "";
         this.firstPriority = rb_first_priority_wlan;
         this.secondPriority = rb_second_priority_btooth;
-    }
-
-    public void connect(Activity context) {
-        //Intent intent = new Intent(context, ConnectBluetoothActivity.class);
-        //context.startActivityForResult(intent, 12345);
     }
 
     public void saveToDatabase(Context context) {
@@ -82,12 +75,15 @@ public class Profile {
         this.wlanName = wlanName;
     }
 
-    public String getWlanPort() {
-        return String.valueOf(wlanPort);
+    public int getWlanPort() {
+        return wlanPort;
     }
 
     public void setWlanPort(String wlanPort) {
-        this.wlanPort = Integer.parseInt(wlanPort);
+        if (wlanPort.isEmpty())
+            this.wlanPort = DEFAULT_PORT;
+        else
+            this.wlanPort = Integer.valueOf(wlanPort);
     }
 
     public String getBlutoothName() {

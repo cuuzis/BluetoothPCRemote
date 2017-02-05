@@ -3,7 +3,6 @@ package com.example.gustavs.remotepccontroller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -15,9 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.gustavs.remotepccontroller.barcodereader.BarcodeActivity;
-import com.example.gustavs.remotepccontroller.bluetooth.ConnectBluetoothActivity;
 import com.example.gustavs.remotepccontroller.model.Profile;
-import com.example.gustavs.remotepccontroller.wifi.ConnectWlanActivity;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
@@ -25,9 +22,9 @@ import static com.example.gustavs.remotepccontroller.MainActivity.PROFILE_ID;
 import static com.example.gustavs.remotepccontroller.barcodereader.BarcodeActivity.BarcodeObject;
 
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AProfileConnecterActivity {
 
-    private static final String TAG = AbstractConnectActivity.class.getSimpleName();
+    private static final String TAG = ProfileActivity.class.getSimpleName();
     private static final int RC_BARCODE_CAPTURE = 9001;
 
     public static final int EMPTY_ID = -1;
@@ -54,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             mProfile = new Profile(this, profileId);
             ((EditText)findViewById(R.id.et_wlanname)).setText(mProfile.getWlanName());
-            ((EditText)findViewById(R.id.et_wlanport)).setText(mProfile.getWlanPort());
+            ((EditText)findViewById(R.id.et_wlanport)).setText(String.valueOf(mProfile.getWlanPort()));
             ((EditText)findViewById(R.id.et_blutoothname)).setText(mProfile.getBlutoothName());
             ((RadioGroup)findViewById(R.id.rg_first_priority)).check(mProfile.getFirstPriority());
             ((RadioGroup)findViewById(R.id.rg_second_priority)).check(mProfile.getSecondPriority());
@@ -66,30 +63,6 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
-    }
-
-    public void connectViaBluetooth(View v) {
-        Intent i = new Intent(this, ConnectBluetoothActivity.class);
-        startActivity(i);
-    }
-
-    public void connectViaWiFiDirect(View v) {
-        //ScanNetwork scanNetwork = new ScanNetwork();
-        //scanNetwork.FindIPsByHostname("cuzis-pc");
-        Toast.makeText(this, "Not implemented", Toast.LENGTH_SHORT).show();
-
-        //ScanNetwork scanNetwork = new ScanNetwork();
-        //scanNetwork.doScan(this);
-        //Intent i = new Intent(this, ConnectWiFiDirectActivity.class);
-        //startActivity(i);
-    }
-
-    public void connectViaWlan(View v) {
-        Intent intent = new Intent(this, ConnectWlanActivity.class);
-        /*Bundle bundle = new Bundle();
-        bundle.putString("SERVER_NAME", "cuzis-pc");
-        intent.putExtras(bundle);*/
-        startActivity(intent);
     }
 
     @Override
@@ -112,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void connect(View view) {
         saveProfile();
-        mProfile.connect(this);
+        connect(mProfile);
     }
 
     private void saveProfile() {                // TODO: button should only be enabled if input is valid
@@ -149,6 +122,16 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             } else {
                 Log.e(TAG, "Barcode read error: " + CommonStatusCodes.getStatusCodeString(resultCode));
+            }
+        }
+        else if (requestCode == 1234) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(this, "Connection was OK", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_FIRST_USER) {
+                Toast.makeText(this, "Reconnecting...", Toast.LENGTH_SHORT).show();
+                //mProfile.connect(this);
+            } else {
+                Toast.makeText(this, "Broken Connection", Toast.LENGTH_SHORT).show();
             }
         }
         else {

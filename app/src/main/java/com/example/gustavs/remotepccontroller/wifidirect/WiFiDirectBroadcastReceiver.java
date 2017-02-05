@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 
-import com.example.gustavs.remotepccontroller.wifidirect.ConnectWiFiDirectActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,7 @@ import java.util.List;
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
-    private ConnectWiFiDirectActivity mActivity;
+    private ConnectionWiFiDirectActivity mActivity;
     private List peers = new ArrayList();
 
     //private WifiP2pManager.PeerListListener myPeerListListener;
@@ -40,7 +38,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         }
     };
 
-    public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel, ConnectWiFiDirectActivity activity) {
+    public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel, ConnectionWiFiDirectActivity activity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;

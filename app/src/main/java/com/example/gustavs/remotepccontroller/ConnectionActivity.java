@@ -1,77 +1,82 @@
 package com.example.gustavs.remotepccontroller;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-public abstract class AbstractConnectActivity extends AppCompatActivity {
+import java.io.IOException;
+import java.io.OutputStream;
 
-    private static final String TAG = AbstractConnectActivity.class.getSimpleName();
-    private boolean isThreadConnected = false;
-    private ProgressDialog dialog;
+public class ConnectionActivity extends AppCompatActivity {
+
+    private static final String TAG = ConnectionActivity.class.getSimpleName();
     private boolean screenOff = false;
+    public static OutputStream outputStream;
 
-    // Sends command string to server
-    protected abstract void sendCommand(String command);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Establishing connection...");
-        dialog.show();
+        setContentView(R.layout.activity_connect);
     }
 
-    // must always be called in subclass
-    protected void setIsConnected(boolean isConnected) {
-        if (dialog.isShowing())
-            dialog.dismiss();
-        if (isConnected) {
-            isThreadConnected = true;
-            setContentView(R.layout.activity_connect);
-        } else {
-            Toast.makeText(this, "Could not connect, check log!", Toast.LENGTH_SHORT).show();
-            this.finish();
+    private void write(String message) {
+        if (outputStream != null) {
+            byte[] msg = message.getBytes();
+            try {
+                outputStream.write(msg);
+            } catch (IOException e) {
+                Log.e(TAG, "Write exception", e);
+                outputStream = null;
+            }
+        } else
+            Log.e(TAG, "Output stream is null");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (outputStream != null) {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Error closing stream");
+            }
+            outputStream = null;
         }
     }
 
-
+    //region buttons
     // Buttons are mapped to command strings by their IDs
     public void onButtonDown(View v) {
-        if (!isThreadConnected) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
         switch (v.getId()) {
             case R.id.up:
-                sendCommand(getResources().getString(R.string.server_up));
+                write(getResources().getString(R.string.server_up));
                 break;
             case R.id.down:
-                sendCommand(getResources().getString(R.string.server_down));
+                write(getResources().getString(R.string.server_down));
                 break;
             case R.id.left:
-                sendCommand(getResources().getString(R.string.server_left));
+                write(getResources().getString(R.string.server_left));
                 break;
             case R.id.right:
-                sendCommand(getResources().getString(R.string.server_right));
+                write(getResources().getString(R.string.server_right));
                 break;
             case R.id.space:
-                sendCommand(getResources().getString(R.string.server_space));
+                write(getResources().getString(R.string.server_space));
                 break;
             case R.id.f5:
-                sendCommand(getResources().getString(R.string.server_f5));
+                write(getResources().getString(R.string.server_f5));
                 break;
             case R.id.ctrl_f5:
-                sendCommand(getResources().getString(R.string.server_ctrl_f5));
+                write(getResources().getString(R.string.server_ctrl_f5));
                 break;
             case R.id.ctrl_l:
-                sendCommand(getResources().getString(R.string.server_ctrl_l));
+                write(getResources().getString(R.string.server_ctrl_l));
                 break;
             default:
                 Log.e(TAG, "Invalid message");
@@ -98,9 +103,9 @@ public abstract class AbstractConnectActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-            sendCommand(getResources().getString(R.string.server_left));
+            write(getResources().getString(R.string.server_left));
         } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            sendCommand(getResources().getString(R.string.server_right));
+            write(getResources().getString(R.string.server_right));
         } else {
             return super.onKeyDown(keyCode, event);
         }
@@ -115,5 +120,6 @@ public abstract class AbstractConnectActivity extends AppCompatActivity {
         }
         return super.onKeyUp(keyCode, event);
     }
+    //endregion buttons
 
 }

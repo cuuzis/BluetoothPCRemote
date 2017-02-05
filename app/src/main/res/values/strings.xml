@@ -40,10 +40,10 @@
     <string name="none">None</string>
     <string name="wireless">Wireless</string>
     <string name="computers_network_name">Computer\'s network name</string>
-    <string name="tcp_port">TCP Port</string>
+    <string name="tcp_port">TCP Port (default: 8001)</string>
     <string name="computers_bluetooth_name">Computer\'s Bluetooth name</string>
     <string name="connection_2nd_priority">Connection 2nd priority:</string>
     <string name="connection_1st_priority">Connection 1st priority:</string>
     <string name="connect">connect</string>
-    <string name="saved">Saved</string>
+    <string name="saved">Profile saved</string>
 </resources>

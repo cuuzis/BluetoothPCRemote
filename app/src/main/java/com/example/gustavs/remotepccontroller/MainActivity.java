@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.Toolbar;
@@ -23,14 +21,11 @@ import com.example.gustavs.remotepccontroller.model.ProfileDataDbHelper;
 
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry._ID;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_FIRST_PRIORITY;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_SECOND_PRIORITY;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
 import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
 
 
-//TODO: lost connection on portrait<->landscape change; no connection establishes if bluetooth is not already on; icon
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AProfileConnecterActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String PROFILE_ID = "ProfileID";
@@ -96,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void connectProfile(int profileId) {
         Profile profile = new Profile(this, profileId);
-        profile.connect(this);
+        connect(profile);
     }
 
     public class ProfileCursorAdapter extends CursorAdapter {

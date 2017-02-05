@@ -6,9 +6,9 @@ import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 
-import com.example.gustavs.remotepccontroller.AbstractConnectActivity;
+import com.example.gustavs.remotepccontroller.ConnectionActivity;
 
-public class ConnectWiFiDirectActivity extends AbstractConnectActivity {
+public class ConnectionWiFiDirectActivity extends ConnectionActivity {
 
     WifiP2pManager mManager;
     WifiP2pManager.Channel mChannel;
@@ -47,10 +47,10 @@ public class ConnectWiFiDirectActivity extends AbstractConnectActivity {
         });
     }
 
-    @Override
-    protected void sendCommand(String command) {
+    /*@Override
+    protected void write(String command) {
         // Not implemented
-    }
+    }*/
 
     /* register the broadcast receiver with the intent values to be matched */
     @Override
