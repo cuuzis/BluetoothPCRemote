@@ -7,14 +7,17 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.example.gustavs.remotepccontroller.model.Profile;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class ConnectionActivity extends AppCompatActivity {
+public class ConnectionActivity extends AProfileConnecterActivity {
 
     private static final String TAG = ConnectionActivity.class.getSimpleName();
     private boolean screenOff = false;
     public static OutputStream outputStream;
+    public static Profile currentProfile;
 
 
 
@@ -32,6 +35,8 @@ public class ConnectionActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Log.e(TAG, "Write exception", e);
                 outputStream = null;
+                // Try to reconnect
+                connect(currentProfile);
             }
         } else
             Log.e(TAG, "Output stream is null");

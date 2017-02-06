@@ -18,17 +18,39 @@ public abstract class AProfileConnecterActivity extends AppCompatActivity {
     private ConnectBluetoothTask mConnectBluetoothTask = null;
     private ConnectWlanTask mConnectWlanTask = null;
     private Profile mProfile;
+    private int mConnectionAttempt;
 
 
-    public void connect(Profile profile) {
+    protected void connect(Profile profile) {
         mProfile = profile;
-        if (mProfile.getFirstPriority() == R.id.rb_first_priority_wlan) {
-            mConnectWlanTask = new ConnectWlanTask(this);
-            mConnectWlanTask.execute(profile);
+        mConnectionAttempt = 1;
+        connect();
+    }
+
+    private void connect() {
+        if (mConnectionAttempt == 1) {
+            if (mProfile.getFirstPriority() == R.id.rb_first_priority_wlan)
+                connectWlan(mProfile);
+            else if (mProfile.getFirstPriority() == R.id.rb_first_priority_btooth)
+                connectBluetooth(mProfile);
+        } else if (mConnectionAttempt == 2) {
+            if (mProfile.getSecondPriority() == R.id.rb_second_priority_wlan)
+                connectWlan(mProfile);
+            else if (mProfile.getSecondPriority() == R.id.rb_second_priority_btooth)
+                connectBluetooth(mProfile);
         } else {
-            mConnectBluetoothTask = new ConnectBluetoothTask(this);
-            mConnectBluetoothTask.execute(profile);
+            Log.i(TAG, "Could not connect");
         }
+    }
+
+    private void connectWlan(Profile profile) {
+        mConnectWlanTask = new ConnectWlanTask(this);
+        mConnectWlanTask.execute(profile);
+    }
+
+    private void connectBluetooth(Profile profile) {
+        mConnectBluetoothTask = new ConnectBluetoothTask(this);
+        mConnectBluetoothTask.execute(profile);
     }
 
     @Override
@@ -44,14 +66,19 @@ public abstract class AProfileConnecterActivity extends AppCompatActivity {
         }
     }
 
-    //@Override
     public void onReceiveConnection(OutputStream oStream) {
-        Log.i(TAG, "Async task done");
         if (oStream != null) {
+            Log.v(TAG, "Asynctask stream received");
             ConnectionActivity.outputStream = oStream;
-            Intent intent = new Intent(this, ConnectionActivity.class);
-            //intent.putExtra("STREAM", (Parcelable) oStream);
-            startActivity(intent);
+            ConnectionActivity.currentProfile = mProfile;
+            if (!(this instanceof ConnectionActivity)) {
+                Intent intent = new Intent(this, ConnectionActivity.class);
+                startActivity(intent);
+            }
+        } else {
+            Log.v(TAG, "Asynctask no stream");
+            mConnectionAttempt++;
+            connect();
         }
     }
 }
