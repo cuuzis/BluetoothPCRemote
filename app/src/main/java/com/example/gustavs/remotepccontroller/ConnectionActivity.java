@@ -1,10 +1,13 @@
 package com.example.gustavs.remotepccontroller;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.gustavs.remotepccontroller.model.Profile;
@@ -18,13 +21,17 @@ public class ConnectionActivity extends AProfileConnecterActivity {
     private boolean screenOff = false;
     public static OutputStream outputStream;
     public static Profile currentProfile;
-
+    private PowerManager.WakeLock mWakeLock; //drains battery
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect);
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, TAG);
+        mWakeLock.acquire();
     }
 
     private void write(String message) {
@@ -38,8 +45,23 @@ public class ConnectionActivity extends AProfileConnecterActivity {
                 // Try to reconnect
                 connect(currentProfile);
             }
-        } else
+        } else {
             Log.e(TAG, "Output stream is null");
+            finish();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mWakeLock.release();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mWakeLock.isHeld())
+            mWakeLock.acquire();
     }
 
     @Override

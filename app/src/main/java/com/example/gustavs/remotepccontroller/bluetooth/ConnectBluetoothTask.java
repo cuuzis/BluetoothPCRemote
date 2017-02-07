@@ -25,6 +25,7 @@ public class ConnectBluetoothTask extends AsyncTask<Profile, OutputStream, Outpu
 
     private ProgressDialog mDialog;
     public static final int REQUEST_ENABLE_BT = 1;
+    private boolean mWaitingForPrompt = false;
 
     public ConnectBluetoothTask(AProfileConnecterActivity act) {
         this.mConnectionActivity = act;
@@ -41,17 +42,12 @@ public class ConnectBluetoothTask extends AsyncTask<Profile, OutputStream, Outpu
 
     @Override
     protected OutputStream doInBackground(Profile... params) {
-        // simulate long work for testing
-        /*try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Log.e(TAG, "Interrupted");
-        }*/
         Profile profile = params[0];
         String hostname = profile.getBlutoothName();
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter != null) {
             if (!bluetoothAdapter.isEnabled()) {
+                mWaitingForPrompt = true;
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 mConnectionActivity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             } else {
@@ -93,7 +89,8 @@ public class ConnectBluetoothTask extends AsyncTask<Profile, OutputStream, Outpu
         Log.v(TAG, "PostExecute");
         if (mDialog.isShowing()) {
             mDialog.dismiss();
-            mConnectionActivity.onReceiveConnection(oStream);
+            if (!mWaitingForPrompt)
+                mConnectionActivity.onReceiveConnection(oStream);
         } else {
             Log.v(TAG, "BT connection cancelled by user");
             close();

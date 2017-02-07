@@ -58,7 +58,7 @@ public abstract class AProfileConnecterActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ENABLE_BT && resultCode == RESULT_OK) {
             Log.i(TAG, "Bluetooth enabled");
-            connect(mProfile);
+            connect();
         } else if (requestCode == REQUEST_ENABLE_BT && resultCode == RESULT_CANCELED) {
             Log.i(TAG, "Bluetooth canceled");
         } else {
