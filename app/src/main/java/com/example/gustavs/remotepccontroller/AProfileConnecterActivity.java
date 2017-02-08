@@ -3,6 +3,7 @@ package com.example.gustavs.remotepccontroller;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.gustavs.remotepccontroller.bluetooth.ConnectBluetoothTask;
 import com.example.gustavs.remotepccontroller.model.Profile;
@@ -39,7 +40,8 @@ public abstract class AProfileConnecterActivity extends AppCompatActivity {
             else if (mProfile.getSecondPriority() == R.id.rb_second_priority_btooth)
                 connectBluetooth(mProfile);
         } else {
-            Log.i(TAG, "Could not connect");
+            Log.e(TAG, "Could not connect");
+            Toast.makeText(this, R.string.could_not_connect, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -61,6 +63,8 @@ public abstract class AProfileConnecterActivity extends AppCompatActivity {
             connect();
         } else if (requestCode == REQUEST_ENABLE_BT && resultCode == RESULT_CANCELED) {
             Log.i(TAG, "Bluetooth canceled");
+            mConnectionAttempt++;
+            connect();
         } else {
             Log.i(TAG, "Unknown activity result");
         }
