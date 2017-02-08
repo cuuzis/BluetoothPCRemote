@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ConnectionActivity">
+
+    <item android:id="@+id/action_presentation_layout"
+        android:title="@string/presentation_layout"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_movie_layout"
+        android:title="@string/movie_layout"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_dim_screen"
+        android:title="@string/dim_screen"
+        android:onClick="onDimScreenClicked"
+        android:checkable="true"
+        app:showAsAction="never" />
+
+</menu>

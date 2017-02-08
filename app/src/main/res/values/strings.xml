@@ -46,4 +46,7 @@
     <string name="connection_1st_priority">Connection 1st priority:</string>
     <string name="connect">connect</string>
     <string name="saved">Profile saved</string>
+    <string name="could_not_connect">Could not connect</string>
+    <string name="movie_layout">Movie layout</string>
+    <string name="presentation_layout">Presentation layout</string>
 </resources>

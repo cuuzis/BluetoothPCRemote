@@ -3,11 +3,13 @@ package com.example.gustavs.remotepccontroller;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.gustavs.remotepccontroller.model.Profile;
@@ -18,7 +20,7 @@ import java.io.OutputStream;
 public class ConnectionActivity extends AProfileConnecterActivity {
 
     private static final String TAG = ConnectionActivity.class.getSimpleName();
-    private boolean screenOff = false;
+    private boolean screenDimmed = false;
     public static OutputStream outputStream;
     public static Profile currentProfile;
     private PowerManager.WakeLock mWakeLock; //drains battery
@@ -27,11 +29,34 @@ public class ConnectionActivity extends AProfileConnecterActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connect);
+        setContentView(R.layout.activity_connection);
+        Toolbar connectionToolbar = (Toolbar) findViewById(R.id.connection_toolbar);
+        setSupportActionBar(connectionToolbar);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null)
+            ab.setDisplayHomeAsUpEnabled(true);
+        else
+            throw new AssertionError("getSupportActionBar returned null");
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, TAG);
         mWakeLock.acquire();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.connection_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else
+            return super.onOptionsItemSelected(item);
     }
 
     private void write(String message) {
@@ -93,7 +118,7 @@ public class ConnectionActivity extends AProfileConnecterActivity {
             case R.id.right:
                 write(getResources().getString(R.string.server_right));
                 break;
-            case R.id.space:
+            case R.id.spacebar:
                 write(getResources().getString(R.string.server_space));
                 break;
             case R.id.f5:
@@ -111,17 +136,18 @@ public class ConnectionActivity extends AProfileConnecterActivity {
         }
     }
 
-    public void onDimScreenClicked(View v) {
+    public void onDimScreenClicked(MenuItem item) {
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        if (screenOff) {
+        if (screenDimmed) {
             params.screenBrightness = -1;
-            screenOff = false;
+            screenDimmed = false;
         } else {
             params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
             params.screenBrightness = 0;
-            screenOff = true;
+            screenDimmed = true;
         }
         getWindow().setAttributes(params);
+        item.setChecked(screenDimmed);
     }
 
     // Volume keys are mapped to arrows:

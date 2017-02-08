@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.gustavs.remotepccontroller.ConnectionActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/connection_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
+
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:text="@string/f5"
+        android:id="@+id/f5"
+        android:layout_below="@+id/connection_toolbar"
+        android:layout_toLeftOf="@+id/ctrl_f5"
+        android:layout_toStartOf="@+id/ctrl_f5"
+        android:layout_marginTop="50dp"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:text="@string/ctrl_f5"
+        android:id="@+id/ctrl_f5"
+        android:layout_below="@+id/connection_toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:text="@string/ctrl_l"
+        android:id="@+id/ctrl_l"
+        android:layout_below="@+id/connection_toolbar"
+        android:layout_toRightOf="@+id/ctrl_f5"
+        android:layout_toEndOf="@+id/ctrl_f5"
+        android:layout_marginTop="50dp"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:text="@string/up_arrow"
+        android:id="@+id/up"
+        android:layout_above="@+id/down"
+        android:layout_centerHorizontal="true"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:text="@string/down_arrow"
+        android:id="@+id/down"
+        android:layout_above="@+id/spacebar"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:text="@string/left_arrow"
+        android:id="@+id/left"
+        android:layout_alignBottom="@+id/down"
+        android:layout_toLeftOf="@+id/down"
+        android:layout_toStartOf="@+id/down"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:text="@string/right_arrow"
+        android:id="@+id/right"
+        android:layout_alignBottom="@+id/down"
+        android:layout_toRightOf="@+id/down"
+        android:layout_toEndOf="@+id/down"
+        android:onClick="onButtonDown" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:text="@string/space"
+        android:id="@+id/spacebar"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:layout_alignLeft="@+id/left"
+        android:layout_alignStart="@+id/left"
+        android:layout_alignRight="@+id/right"
+        android:layout_alignEnd="@+id/right"
+        android:onClick="onButtonDown" />
+
+</RelativeLayout>
