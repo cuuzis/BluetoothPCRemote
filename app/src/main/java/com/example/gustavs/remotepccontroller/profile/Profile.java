@@ -1,21 +1,21 @@
-package com.example.gustavs.remotepccontroller.model;
+package com.example.gustavs.remotepccontroller.profile;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import static com.example.gustavs.remotepccontroller.ProfileActivity.EMPTY_ID;
+import static com.example.gustavs.remotepccontroller.profile.ProfileActivity.EMPTY_ID;
 import static com.example.gustavs.remotepccontroller.R.id.rb_first_priority_wlan;
 import static com.example.gustavs.remotepccontroller.R.id.rb_second_priority_btooth;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry._ID;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.ALL_COLUMNS;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_FIRST_PRIORITY;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_SECOND_PRIORITY;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.TABLE_NAME;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry._ID;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.ALL_COLUMNS;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_FIRST_PRIORITY;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_SECOND_PRIORITY;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.TABLE_NAME;
 
 public class Profile {
 

@@ -5,15 +5,12 @@
     android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ProfileActivity">
+    tools:context=".profile.ProfileActivity">
 
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/profile_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/profile_toolbar"/>
 
 
     <TextView
@@ -22,7 +19,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/connection_1st_priority"
-        android:layout_below="@+id/profile_toolbar"
+        android:layout_below="@id/profile_toolbar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
     
@@ -30,17 +27,15 @@
         android:id="@+id/rg_first_priority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lbl_first_priority"
+        android:layout_below="@id/lbl_first_priority"
         android:orientation="horizontal"
         android:checkedButton="@+id/rb_first_priority_wlan">
         <RadioButton
-            android:id="@+id/rb_first_priority_wlan"
+            android:id="@id/rb_first_priority_wlan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/wlan"
             android:onClick="onPriorityChecked" />
-            <!--android:button="@null"
-            android:background="@drawable/ic_mode_edit_black_24dp"-->
         <RadioButton
             android:id="@+id/rb_first_priority_btooth"
             android:layout_width="wrap_content"
@@ -55,7 +50,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/connection_2nd_priority"
-        android:layout_below="@+id/rg_first_priority"
+        android:layout_below="@id/rg_first_priority"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
@@ -63,7 +58,7 @@
         android:id="@+id/rg_second_priority"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lbl_second_priority"
+        android:layout_below="@id/lbl_second_priority"
         android:orientation="horizontal"
         android:checkedButton="@+id/rb_second_priority_btooth">
         <RadioButton
@@ -73,7 +68,7 @@
             android:text="@string/wlan"
             android:onClick="onPriorityChecked" />
         <RadioButton
-            android:id="@+id/rb_second_priority_btooth"
+            android:id="@id/rb_second_priority_btooth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/bluetooth"
@@ -96,10 +91,10 @@
         android:layout_alignParentStart="true"/>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_input_layout1"
+        android:id="@+id/text_input_wlanname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lbl_wireless"
+        android:layout_below="@id/lbl_wireless"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
@@ -113,10 +108,10 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_input_layout2"
+        android:id="@+id/text_input_wlanport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_input_layout1"
+        android:layout_below="@id/text_input_wlanname"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
         <android.support.v7.widget.AppCompatEditText
@@ -137,15 +132,15 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/bluetooth"
-        android:layout_below="@+id/text_input_layout2"
+        android:layout_below="@id/text_input_wlanport"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_input_layout3"
+        android:id="@+id/text_input_bluetooth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lbl_bluetooth"
+        android:layout_below="@id/lbl_bluetooth"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
         <android.support.v7.widget.AppCompatEditText
@@ -159,11 +154,11 @@
     </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:id="@+id/btn_scanQRCode"
+        android:id="@id/btn_scanQRCode"
         android:text="@string/btn_scanQRCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rg_second_priority"
+        android:layout_below="@id/rg_second_priority"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="scanQRCode" />

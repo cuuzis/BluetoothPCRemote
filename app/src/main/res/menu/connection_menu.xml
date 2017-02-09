@@ -2,15 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ConnectionActivity">
+    tools:context=".connection.ConnectionActivity">
+
+    <group android:checkableBehavior="single">
 
     <item android:id="@+id/action_presentation_layout"
         android:title="@string/presentation_layout"
+        android:onClick="setPresentationLayout"
         app:showAsAction="never" />
 
-    <item android:id="@+id/action_movie_layout"
-        android:title="@string/movie_layout"
+    <item android:id="@+id/action_media_layout"
+        android:title="@string/media_layout"
+        android:onClick="setMediaLayout"
         app:showAsAction="never" />
+
+    </group>
 
     <item android:id="@+id/action_dim_screen"
         android:title="@string/dim_screen"

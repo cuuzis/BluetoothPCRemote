@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.NetworkInformation;
 using System.Collections.Generic;
+using WindowsInput;
+using System.IO;
 
 namespace TrayIconBluetoothController
 {
@@ -38,7 +40,7 @@ namespace TrayIconBluetoothController
                 BeginAcceptWlanConnector(ipAddr);
             });
             //DiagnoseNetwork();
-        }
+    }
 
 
 
@@ -101,61 +103,17 @@ namespace TrayIconBluetoothController
         }
 
         private void AcceptConnection(TcpListener myListener, string ip) {
-            try {
-
-                Socket peerStream = myListener.AcceptSocket();
-                Console.WriteLine("Connection accepted from " + peerStream.RemoteEndPoint);
-
-                while (true) {
-                    byte[] buf = new byte[1024];
-                    int readLen = peerStream.Receive(buf);
-                    if (readLen == 0) {
-                        Console.WriteLine("Connection closed.");
-                        form.NotifyLostConnection();
-                        peerStream.Close();
-                        myListener.Stop();
-                        BeginAcceptWlanConnector(ip);
-                        break;
-                    }
-                    else {
-                        String readbytes = System.Text.Encoding.UTF8.GetString(buf, 0, readLen);
-                        Console.WriteLine("Recevied {0} bytes: {1}", readLen, readbytes);
-                        switch (readbytes) {
-                            case UP:
-                                SendKeys.SendWait("{UP}");
-                                break;
-                            case DOWN:
-                                SendKeys.SendWait("{DOWN}");
-                                break;
-                            case LEFT:
-                                SendKeys.SendWait("{LEFT}");
-                                break;
-                            case RIGHT:
-                                SendKeys.SendWait("{RIGHT}");
-                                break;
-                            case SPACE:
-                                SendKeys.SendWait(" ");
-                                break;
-                            case F5:
-                                SendKeys.SendWait("{F5}");
-                                break;
-                            case CTRL_F5:
-                                SendKeys.SendWait("^{F5}");
-                                break;
-                            case CTRL_L:
-                                SendKeys.SendWait("^l");
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+            using (Socket peerSocket = myListener.AcceptSocket()) {
+                using (Stream peerStream = new NetworkStream(peerSocket)) {
+                    form.NotifyEstablishedConnection();
+                    Console.WriteLine("Endpoint {0} connected to: {1}", myListener.LocalEndpoint, peerSocket.RemoteEndPoint);
+                    VirtualKeyboard.readWhileOpen(peerStream);
                 }
+                Console.WriteLine("Wlan connection closed.");
+                form.NotifyLostConnection();
+                myListener.Stop();
             }
-            catch (Exception e) {
-                Console.WriteLine("Error..... " + e.StackTrace);
-            }
+            BeginAcceptWlanConnector(ip);
         }
-
     }
-
 }

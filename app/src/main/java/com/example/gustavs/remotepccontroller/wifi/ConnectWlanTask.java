@@ -4,8 +4,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.gustavs.remotepccontroller.AProfileConnecterActivity;
-import com.example.gustavs.remotepccontroller.model.Profile;
+import com.example.gustavs.remotepccontroller.connection.AProfileConnecterActivity;
+import com.example.gustavs.remotepccontroller.profile.Profile;
 
 import java.io.IOException;
 import java.io.OutputStream;

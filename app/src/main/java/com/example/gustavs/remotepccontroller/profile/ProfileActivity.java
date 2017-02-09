@@ -1,4 +1,4 @@
-package com.example.gustavs.remotepccontroller;
+package com.example.gustavs.remotepccontroller.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,8 +13,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.gustavs.remotepccontroller.connection.AProfileConnecterActivity;
+import com.example.gustavs.remotepccontroller.R;
 import com.example.gustavs.remotepccontroller.barcodereader.BarcodeActivity;
-import com.example.gustavs.remotepccontroller.model.Profile;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 

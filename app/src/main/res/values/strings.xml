@@ -47,6 +47,12 @@
     <string name="connect">connect</string>
     <string name="saved">Profile saved</string>
     <string name="could_not_connect">Could not connect</string>
-    <string name="movie_layout">Movie layout</string>
+    <string name="media_layout">Media layout</string>
     <string name="presentation_layout">Presentation layout</string>
+    <string name="pause">play/pause</string>
+    <string name="next_track">next track</string>
+    <string name="previous_track">previous track</string>
+    <string name="mute">mute</string>
+    <string name="volume_up">volume +</string>
+    <string name="volume_down">volume -</string>
 </resources>

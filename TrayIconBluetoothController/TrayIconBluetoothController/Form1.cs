@@ -19,7 +19,7 @@ namespace TrayIconBluetoothController
             //this.notifyIcon1.Icon = new Icon("Resources/redBTicon.ico"); //((System.Drawing.Icon)(("redBTicon.ico")));
             //System.ComponentModel.ComponentResourceManager resources
 
-            string testMessage = "CUZIS-PC;8001;cuzis-pc";
+            string testMessage = "cuzis-pc;8001;CUZIS-PC";
             this.qrCodePicturebox.Image = QRCodeGenerator.GenerateQRCode(testMessage, 180);
             this.qrCodePicturebox.Refresh();
 

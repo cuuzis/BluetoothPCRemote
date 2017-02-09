@@ -1,33 +1,30 @@
-package com.example.gustavs.remotepccontroller.model;
+package com.example.gustavs.remotepccontroller.profile;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry._ID;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.ALL_COLUMNS;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_FIRST_PRIORITY;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_SECOND_PRIORITY;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.TABLE_NAME;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry._ID;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.ALL_COLUMNS;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_FIRST_PRIORITY;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_SECOND_PRIORITY;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.TABLE_NAME;
 
 public class ProfileDataDbHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "ProfileData.db";
 
-
-
-
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TABLE_NAME + " (" +
-                    _ID + " INTEGER PRIMARY KEY," +
+                    _ID + INT_TYPE + " PRIMARY KEY" + COMMA_SEP +
                     COLUMN_NAME_WLANNAME + TEXT_TYPE + COMMA_SEP +
                     COLUMN_NAME_WLANPORT + INT_TYPE + COMMA_SEP +
                     COLUMN_NAME_BLUETOOTHNAME + TEXT_TYPE + COMMA_SEP +

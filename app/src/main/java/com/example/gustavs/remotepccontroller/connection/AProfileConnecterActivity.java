@@ -1,12 +1,13 @@
-package com.example.gustavs.remotepccontroller;
+package com.example.gustavs.remotepccontroller.connection;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.gustavs.remotepccontroller.R;
 import com.example.gustavs.remotepccontroller.bluetooth.ConnectBluetoothTask;
-import com.example.gustavs.remotepccontroller.model.Profile;
+import com.example.gustavs.remotepccontroller.profile.Profile;
 import com.example.gustavs.remotepccontroller.wifi.ConnectWlanTask;
 
 import java.io.OutputStream;
@@ -29,19 +30,19 @@ public abstract class AProfileConnecterActivity extends AppCompatActivity {
     }
 
     private void connect() {
-        if (mConnectionAttempt == 1) {
-            if (mProfile.getFirstPriority() == R.id.rb_first_priority_wlan)
-                connectWlan(mProfile);
-            else if (mProfile.getFirstPriority() == R.id.rb_first_priority_btooth)
-                connectBluetooth(mProfile);
-        } else if (mConnectionAttempt == 2) {
-            if (mProfile.getSecondPriority() == R.id.rb_second_priority_wlan)
-                connectWlan(mProfile);
-            else if (mProfile.getSecondPriority() == R.id.rb_second_priority_btooth)
-                connectBluetooth(mProfile);
-        } else {
+        if ((mConnectionAttempt == 1) && (mProfile.getFirstPriority() == R.id.rb_first_priority_wlan))
+            connectWlan(mProfile);
+        else if ((mConnectionAttempt == 1) && (mProfile.getFirstPriority() == R.id.rb_first_priority_btooth))
+            connectBluetooth(mProfile);
+        else if ((mConnectionAttempt == 2) && (mProfile.getSecondPriority() == R.id.rb_second_priority_wlan))
+            connectWlan(mProfile);
+        else if ((mConnectionAttempt == 2) && (mProfile.getSecondPriority() == R.id.rb_second_priority_btooth))
+            connectBluetooth(mProfile);
+        else {
             Log.e(TAG, "Could not connect");
             Toast.makeText(this, R.string.could_not_connect, Toast.LENGTH_SHORT).show();
+            if (this instanceof ConnectionActivity)
+                finish();
         }
     }
 

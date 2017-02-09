@@ -32,13 +32,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ConnectionActivity"
+            android:name=".connection.ConnectionActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".wifidirect.ConnectionWiFiDirectActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ProfileActivity"
+            android:name=".profile.ProfileActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".barcodereader.BarcodeActivity"

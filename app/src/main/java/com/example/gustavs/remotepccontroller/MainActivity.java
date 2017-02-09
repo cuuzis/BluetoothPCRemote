@@ -16,13 +16,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gustavs.remotepccontroller.model.Profile;
-import com.example.gustavs.remotepccontroller.model.ProfileDataDbHelper;
+import com.example.gustavs.remotepccontroller.connection.AProfileConnecterActivity;
+import com.example.gustavs.remotepccontroller.profile.Profile;
+import com.example.gustavs.remotepccontroller.profile.ProfileActivity;
+import com.example.gustavs.remotepccontroller.profile.ProfileDataDbHelper;
 
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry._ID;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
-import static com.example.gustavs.remotepccontroller.model.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry._ID;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_BLUETOOTHNAME;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_WLANNAME;
+import static com.example.gustavs.remotepccontroller.profile.ProfileData.ProfileEntry.COLUMN_NAME_WLANPORT;
 
 
 public class MainActivity extends AProfileConnecterActivity {

@@ -1,4 +1,4 @@
-package com.example.gustavs.remotepccontroller.model;
+package com.example.gustavs.remotepccontroller.profile;
 
 import android.provider.BaseColumns;
 
