@@ -8,46 +8,34 @@ using System.Net.NetworkInformation;
 using System.Collections.Generic;
 using WindowsInput;
 using System.IO;
+using System.Threading;
+using static TrayIconBluetoothController.MainForm;
 
 namespace TrayIconBluetoothController
 {
 
     public class WlanConnector
     {
-        private readonly Form1 form;
-        //private readonly string IP_ADDRESS;// = "192.168.137.1";//"172.24.20.133";
-        private readonly int PORT = 8001;
+        private readonly MainForm form;
 
+        private bool isStopped = false;
+        TcpListener myListener;
+        private Stream activeStream;
 
-        private const string UP = "UP";
-        private const string DOWN = "DOWN";
-        private const string LEFT = "LEFT";
-        private const string RIGHT = "RIGHT";
-        private const string SPACE = "SPACE";
-        private const string F5 = "F5";
-        private const string CTRL_F5 = "CTRL_F5";
-        private const string CTRL_L = "CTRL_L";
-
-
-        public WlanConnector(Form1 form1) {
+        public WlanConnector(MainForm form1, IPAddress ipAddr) {
             this.form = form1;
-            Console.WriteLine("Initializing WLAN...");
-            List<string> ipAdresses = GetLocalIpAddresses();
 
-            // TODO: Async foreach, that would cancel connection bradcast after creating a connection
-            // Documentation of Parallel: operations MAY run in parallel
-            Parallel.ForEach(ipAdresses, ipAddr => {
-                BeginAcceptWlanConnector(ipAddr);
-            });
-            //DiagnoseNetwork();
-    }
+            myListener = new TcpListener(ipAddr, Properties.Settings.Default.port);
+            myListener.Start();
+            BeginAcceptWlanConnector();
+        }
 
 
 
         #region getting IPV4 host addresses
-        private List<string> GetLocalIpAddresses()
+        public static List<IPAddress> GetLocalIpAddresses()
         {
-            List<string> result = new List<string>();
+            List<IPAddress> result = new List<IPAddress>();
             NetworkInterfaceType eth = NetworkInterfaceType.Ethernet;
             NetworkInterfaceType wifi = NetworkInterfaceType.Wireless80211;
             foreach (NetworkInterface interf in NetworkInterface.GetAllNetworkInterfaces())
@@ -58,11 +46,11 @@ namespace TrayIconBluetoothController
                             //&& (interf.Name == "Ethernet" || interf.Name == "Wi-Fi"))
                             //&& (interf.Name == "Wi-Fi"))
                             && (interf.Name == "Ethernet" || interf.Name == "Wi-Fi" || interf.Name.StartsWith("Local Area Connection")))
-                            result.Add(ip.Address.ToString());
+                            result.Add(ip.Address);
             return result;
         }
 
-        private void DiagnoseNetwork() {
+        private static void DiagnoseNetwork() {
             Console.WriteLine("Ethernet:");
             GetLocalIPv4(NetworkInterfaceType.Ethernet);
             Console.WriteLine("Wireless:");
@@ -71,7 +59,7 @@ namespace TrayIconBluetoothController
             GetLocalIPAddress();
         }
 
-        public void GetLocalIPv4(NetworkInterfaceType _type) {
+        public static void GetLocalIPv4(NetworkInterfaceType _type) {
             foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces()) {
                 if (item.NetworkInterfaceType == _type && item.OperationalStatus == OperationalStatus.Up) {
                     foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses) {
@@ -93,27 +81,41 @@ namespace TrayIconBluetoothController
         }
         #endregion
 
-        private void BeginAcceptWlanConnector(string ip) {
-            IPAddress ipAddr = IPAddress.Parse(ip);
-            TcpListener myListener = new TcpListener(ipAddr, PORT);
-            myListener.Start(); // Start Listeneting
-
+        private void BeginAcceptWlanConnector() {
             Console.WriteLine("Listening for Wlan clients at endpoint: " + myListener.LocalEndpoint);
-            AcceptConnection(myListener, ip);
+            myListener.BeginAcceptSocket(AcceptConnection, myListener);
         }
 
-        private void AcceptConnection(TcpListener myListener, string ip) {
-            using (Socket peerSocket = myListener.AcceptSocket()) {
-                using (Stream peerStream = new NetworkStream(peerSocket)) {
-                    form.NotifyEstablishedConnection();
-                    Console.WriteLine("Endpoint {0} connected to: {1}", myListener.LocalEndpoint, peerSocket.RemoteEndPoint);
-                    VirtualKeyboard.readWhileOpen(peerStream);
+        public void stop() {
+            isStopped = true;
+            myListener.Stop();
+            if (activeStream != null)
+                activeStream.Close();
+        }
+
+        private void AcceptConnection(IAsyncResult result) {
+            if (result.IsCompleted) {
+                if (isStopped)
+                    Console.WriteLine("Wlan listening cancelled");
+                else {
+                    TcpClient remoteDevice = ((TcpListener)result.AsyncState).EndAcceptTcpClient(result);
+                    using (Stream peerStream = remoteDevice.GetStream()) {
+                        //form.setWlanConnected(true);
+                        SetConnectedDelegate dt = new SetConnectedDelegate(form.setWlanConnected);
+                        form.Invoke(dt, true);
+                        Console.WriteLine("Wlan connected to: {0}", remoteDevice.Client.LocalEndPoint);
+                        this.activeStream = peerStream;
+                        VirtualKeyboard.readWhileOpen(peerStream);
+                    }
+                    Console.WriteLine("Wlan connection closed.");
+                    //form.setWlanConnected(false);
+                    if (!isStopped) {
+                        SetConnectedDelegate df = new SetConnectedDelegate(form.setWlanConnected);
+                        form.Invoke(df, false);
+                        BeginAcceptWlanConnector();
+                    }
                 }
-                Console.WriteLine("Wlan connection closed.");
-                form.NotifyLostConnection();
-                myListener.Stop();
             }
-            BeginAcceptWlanConnector(ip);
         }
     }
 }

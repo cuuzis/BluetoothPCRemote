@@ -16,7 +16,7 @@ namespace TrayIconBluetoothController
 
     public class WiFiDirectConnector
     {
-        private readonly Form1 form1;
+        private readonly MainForm form1;
         Windows.Devices.WiFiDirect.WiFiDirectDevice wfdDevice;
         DeviceInformationCollection devInfoCollection;
 
@@ -25,7 +25,7 @@ namespace TrayIconBluetoothController
         private readonly string KEY  = "unsafepassword";
 
 
-        public WiFiDirectConnector(Form1 form1) {
+        public WiFiDirectConnector(MainForm form1) {
             this.form1 = form1;
             Console.WriteLine("Initializing WiFi Direct...");
 
