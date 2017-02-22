@@ -1,38 +1,29 @@
 # Android remote control application for a PC
 
 ## Problem definition
-Switching between slides when giving a presentation is more convenient with a wireless remote control, but they are not always available.
-An Android device can easily substitute such a designated remote controller.
+Switching between slides when giving a presentation is very convenient with a wireless remote
+control. But these devices are expensive and rarely at hand. However, an Android device could
+easily substitute such a designated remote. Additionally, the Android device could work as a generic
+remote controller and also change the computer’s volume, play a music track, etc. from a distance.
 
 ## Problem Solution
 Android bluetooth remote controller application, which connects to a Windows PC with the server application installed and sends keystrokes to it. 
-The intended usage is to control presentations and movies wirelessly from Android device.
+The solution includes a Windows server application, that listens to the Android device, and interprets the commands.
 
-## Proposed Features
-Must haves
-* QR code scanning to send connection info (using Google Barcode API)
-* Connect to PC via Bluetooth
-* Connect to PC via WiFi network
-* Connect to PC alternating between BT and WiFi
-* Send commands to PC:
-  * swich slides with the volume buttons
-  * send other keystrokes using the screen (spacebar, arrows, F5, change volume)
-* Menu, to configure:
-  * current connection method (Bluetooth, WiFi, Hybrid)
-  * current layout mode (presentation, movie, ..)
-  * PC to connect to
-* Services in background
+## Features
+Implemented
+* Connecting to PC via Bluetooth
+* Connecting to PC via WiFi network Implemented
+* Connecting to PC alternating between BT and WiFi on lost connection
+* QR code scanning to get connection info (using Google Barcode API)
+* Send commands to PC (swich slides with the volume buttons and send keystrokes from the screen)
 
-Should haves
+Proposed
 * Connect to PC via WiFi direct
-* User chooses what buttons do
-
-Could haves
 * Act as keyboard (send text)
-* Connect to PC via the Internet (using a server)
+* User chooses what buttons do
 * Control mouse cursor
 
 
 # Windows Server application
-A C# Windows Forms application, runs background process that listens for incoming connections. Shows connection status as an icon in the tasbar notification area.
-Should also have option to choose a connection method.
+A C# Windows Forms application, listens for incoming connections. Bluetooth and network listening can be started and stopped on demand. Generates a QR code with the necessary information to initiate a connection.
