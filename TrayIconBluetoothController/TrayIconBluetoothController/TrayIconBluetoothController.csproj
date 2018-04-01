@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TrayIconBluetoothController</RootNamespace>
     <AssemblyName>TrayIconBluetoothController</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <TargetPlatformVersion>10.0</TargetPlatformVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -78,7 +79,6 @@
     <Compile Include="QRCodeGenerator.cs" />
     <Compile Include="VirtualKeyboard.cs" />
     <Compile Include="WlanConnector.cs" />
-    <Compile Include="WiFiDirectConnector.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
