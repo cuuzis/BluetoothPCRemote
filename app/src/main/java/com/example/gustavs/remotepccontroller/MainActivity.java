@@ -7,12 +7,12 @@ import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +44,7 @@ public class MainActivity extends AProfileConnecterActivity {
         mDbHelper = new ProfileDataDbHelper(this);
         // bind profile data to listView
         mProfileAdapter = new ProfileCursorAdapter(this, mDbHelper.queryAllProfiles());
-        ListViewCompat listView = (ListViewCompat) findViewById(R.id.list_view_compat);
+        ListView listView = findViewById(R.id.list_view);
         listView.setAdapter(mProfileAdapter);
     }
 
