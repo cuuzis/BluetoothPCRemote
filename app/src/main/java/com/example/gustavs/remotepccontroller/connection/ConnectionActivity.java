@@ -78,16 +78,18 @@ public class ConnectionActivity extends AProfileConnecterActivity {
 
     private void write(WindowsKey keyDown, WindowsKey keyPress) {
         if (outputStream != null) {
-            try {
-                byte keys[] = new byte[] {keyDown.keyCode, keyPress.keyCode};
-                Log.v(TAG, "Sent bytes: " + keys[0] + ", " + keys[1]);
-                outputStream.write(keys);
-            } catch (IOException e) {
-                Log.e(TAG, "Write exception", e);
-                outputStream = null;
-                // Try to reconnect
-                connect(currentProfile);
-            }
+            byte[] keys = new byte[] {keyDown.keyCode, keyPress.keyCode};
+            new Thread(() -> {
+                try {
+                    outputStream.write(keys);
+                    Log.v(TAG, "Sent bytes: " + keys[0] + ", " + keys[1]);
+                } catch (IOException e) {
+                    Log.e(TAG, "Write exception", e);
+                    outputStream = null;
+                    // Try to reconnect
+                    connect(currentProfile);
+                }
+            }).start();
         } else {
             Log.e(TAG, "Output stream is null");
             finish();
