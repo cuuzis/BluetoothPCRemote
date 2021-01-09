@@ -90,7 +90,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_wlanname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -98,23 +98,23 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_wlanname"
             android:hint="@string/computers_network_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_wlanport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_input_wlanname"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_wlanport"
             android:hint="@string/tcp_port"
             android:layout_width="match_parent"
@@ -124,7 +124,7 @@
             android:layout_alignParentStart="true"
             android:inputType="number"
             android:maxLength="5"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/lbl_bluetooth"
@@ -136,14 +136,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_bluetooth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/lbl_bluetooth"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_blutoothname"
             android:hint="@string/computers_bluetooth_name"
             android:layout_width="match_parent"
@@ -151,7 +151,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@id/btn_scanQRCode"

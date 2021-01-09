@@ -55,4 +55,5 @@
     <string name="mute">mute</string>
     <string name="volume_up">volume +</string>
     <string name="volume_down">volume -</string>
+    <string name="add_new_profile">add new profile</string>
 </resources>

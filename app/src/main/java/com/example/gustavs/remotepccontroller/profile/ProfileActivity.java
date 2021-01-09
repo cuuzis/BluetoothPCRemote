@@ -2,8 +2,8 @@ package com.example.gustavs.remotepccontroller.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +19,7 @@ import com.example.gustavs.remotepccontroller.barcodereader.BarcodeActivity;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import static android.app.Activity.RESULT_FIRST_USER;
 import static com.example.gustavs.remotepccontroller.MainActivity.PROFILE_ID;
 import static com.example.gustavs.remotepccontroller.barcodereader.BarcodeActivity.BarcodeObject;
 
