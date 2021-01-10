@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Net.NetworkInformation;
 using System.Collections.Generic;
-using WindowsInput;
 using System.IO;
-using System.Threading;
 using static TrayIconBluetoothController.MainForm;
 
 namespace TrayIconBluetoothController
@@ -24,7 +19,6 @@ namespace TrayIconBluetoothController
 
         public WlanConnector(MainForm form1, IPAddress ipAddr) {
             this.form = form1;
-
             myListener = new TcpListener(ipAddr, Properties.Settings.Default.port);
             myListener.Start();
             BeginAcceptWlanConnector();
