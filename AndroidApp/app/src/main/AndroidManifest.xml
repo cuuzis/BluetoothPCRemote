@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gustavs.remotepccontroller">
 
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
+    <uses-sdk android:targetSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -18,10 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode" />
         <activity
             android:name=".MainActivity"
@@ -33,9 +30,6 @@
         </activity>
         <activity
             android:name=".connection.ConnectionActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".wifidirect.ConnectionWiFiDirectActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".profile.ProfileActivity"

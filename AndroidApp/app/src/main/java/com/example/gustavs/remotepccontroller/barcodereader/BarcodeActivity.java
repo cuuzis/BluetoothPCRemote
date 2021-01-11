@@ -1,145 +1,148 @@
 package com.example.gustavs.remotepccontroller.barcodereader;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
+import android.media.Image;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.OnLifecycleEvent;
-
 import android.util.Log;
-import android.util.SparseArray;
+import android.util.Size;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.gustavs.remotepccontroller.R;
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.FocusingProcessor;
-import com.google.android.gms.vision.Tracker;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.android.gms.tasks.Task;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.mlkit.vision.barcode.Barcode;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
+import com.google.mlkit.vision.common.InputImage;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-//TODO: Add text saying "Please scan QR code from PC screen"; Validate Barcode before exit!
+import static com.google.mlkit.vision.barcode.Barcode.FORMAT_QR_CODE;
+
 public class BarcodeActivity extends AppCompatActivity {
     private static final String TAG = BarcodeActivity.class.getSimpleName();
+
+    private static final int CAMERA_REQUEST_CODE = 10;
     public static final String BarcodeObject = "Barcode";
-
-    private static final float PREVIEW_FPS = 15.0f;
-
-    private CameraSource mCameraSource;
-    private CameraPreview mPreview;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.activity_barcode);
-        createCameraSource();
-        startCameraSource();
+        setContentView(R.layout.camera_preview);
+        requestCameraPermission();
     }
 
-    /**
-     * Restarts the camera.
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startCameraSource();
-    }
-
-    /**
-     * Stops the camera.
-     */
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mPreview != null) {
-            mPreview.stop();
+    private void requestCameraPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            startCamera();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
         }
     }
 
-    /**
-     * Releases the resources associated with the camera source, the associated detectors, and the
-     * rest of the processing pipeline.
-     */
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mPreview != null) {
-            mPreview.release();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCamera();
+            } else {
+                Log.w(TAG, "Camera permission denied");
+            }
         }
     }
 
-    /**
-     * Creates a camera source with QR tag detector attached
-     */
-    private void createCameraSource() {
-        Context context = getApplicationContext();
-        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context)
-                .setBarcodeFormats(Barcode.QR_CODE)
+    private void startCamera() {
+        final ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                bindPreview(cameraProvider);
+            } catch (ExecutionException | InterruptedException e) {
+                // No errors need to be handled for this Future.
+                // This should never be reached.
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+
+    void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
+        // Show/hide informational texts
+        findViewById(R.id.text_camera_not_available).setVisibility(View.INVISIBLE);
+        findViewById(R.id.text_please_scan_qr_code).setVisibility(View.VISIBLE);
+
+        // Set-up camera preview
+        CameraSelector cameraSelector = new CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build();
-        barcodeDetector.setProcessor(new FocusingProcessor<Barcode>(barcodeDetector, new Tracker<Barcode>()) {
+        Preview preview = new Preview.Builder().build();
+        PreviewView previewView = findViewById(R.id.previewView);
+        preview.setSurfaceProvider(previewView.getSurfaceProvider());
+
+        // Set-up image analysis
+        ImageAnalysis imageAnalyzer = buildImageAnalyzer();
+
+        cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalyzer);
+    }
+
+    private ImageAnalysis buildImageAnalyzer() {
+        ImageAnalysis imageAnalysis =
+                new ImageAnalysis.Builder()
+                        .setTargetResolution(new Size(1280, 720))
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        .build();
+        imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this), new ImageAnalysis.Analyzer() {
+
             @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
-                if (detections != null) {
-                    SparseArray<Barcode> barcodes = detections.getDetectedItems();
-                    if (barcodes != null && barcodes.size() > 0) {
-                        int key = barcodes.keyAt(0);
-                        Barcode best = barcodes.get(key);
-                        if (best != null) {
-                            System.out.println("BARCODE FOUND:" + best.displayValue);
+            @androidx.camera.core.ExperimentalGetImage
+            public void analyze(@NonNull ImageProxy imageProxy) {
+                Image mediaImage = imageProxy.getImage();
+                if (mediaImage != null) {
+                    InputImage image = InputImage.fromMediaImage(mediaImage, imageProxy.getImageInfo().getRotationDegrees());
+                    // Pass image to an ML Kit Vision API
+                    BarcodeScannerOptions options =
+                            new BarcodeScannerOptions.Builder()
+                                    .setBarcodeFormats(FORMAT_QR_CODE)
+                                    .build();
+                    BarcodeScanner scanner = BarcodeScanning.getClient(options);
+                    Task<List<Barcode>> scanningTask = scanner.process(image);
+
+                    scanningTask.addOnSuccessListener(barcodes -> {
+                        if (barcodes != null && barcodes.size() > 0) {
+                            final String barcodeValue = barcodes.get(0).getDisplayValue();
+                            Log.d(TAG, "Using barcode 1 of " + barcodes.size() + ": " + barcodeValue);
                             Intent data = new Intent();
-                            data.putExtra(BarcodeObject, best);
+                            data.putExtra(BarcodeObject, barcodeValue);
                             setResult(CommonStatusCodes.SUCCESS, data);
                             finish();
+                        } else {
+                            Log.d(TAG, "No barcodes in frame");
+                            imageProxy.close();
                         }
-                    }
+                    });
+
+                    scanningTask.addOnFailureListener(e -> {
+                        Log.e(TAG, "Barcode scanning exception", e);
+                    });
                 }
-            }
-            @Override
-            public int selectFocus(Detector.Detections<Barcode> detections) {
-                return 0;
             }
         });
-
-        Point displaySize = new Point();
-        getWindowManager().getDefaultDisplay().getSize(displaySize);
-
-        mCameraSource = new CameraSource.Builder(context, barcodeDetector)
-                .setFacing(CameraSource.CAMERA_FACING_BACK)
-                .setRequestedPreviewSize(displaySize.x, displaySize.y)
-                .setAutoFocusEnabled(true)
-                .setRequestedFps(PREVIEW_FPS)
-                .build();
-
+        return imageAnalysis;
     }
 
-
-    private void startCameraSource() {
-        if (mCameraSource != null) {
-            try {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                mPreview = (CameraPreview) findViewById(R.id.cameraPreview);
-                mPreview.start(mCameraSource);
-            } catch (IOException e) {
-                Log.e(TAG, "Unable to start camera source.", e);
-                mCameraSource.release();
-                mCameraSource = null;
-            }
-        }
-    }
 }

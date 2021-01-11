@@ -111,10 +111,9 @@ public class ProfileActivity extends AProfileConnecterActivity {
         if (requestCode == RC_BARCODE_CAPTURE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeObject);
-                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
-
-                    String[] values = decodeValues(barcode.displayValue);
+                    String barcodeValue = data.getStringExtra(BarcodeObject);
+                    Log.d(TAG, "Barcode read: " + barcodeValue);
+                    String[] values = decodeValues(barcodeValue);
                     ((EditText)findViewById(R.id.et_wlanname)).setText(values[0]);
                     ((EditText)findViewById(R.id.et_wlanport)).setText(values[1]);
                     ((EditText)findViewById(R.id.et_blutoothname)).setText(values[2]);
@@ -145,8 +144,7 @@ public class ProfileActivity extends AProfileConnecterActivity {
         String[] result = displayValue.split(";");
         if (result.length < 3) {
             Log.e(TAG, "Bad QR Code");
-            String[] badresult = {"", "", ""};
-            return badresult;
+            return new String[]{"", "", ""};
         } else {
             return result;
         }
