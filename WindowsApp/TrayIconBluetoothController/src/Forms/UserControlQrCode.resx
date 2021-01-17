@@ -117,35 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ic_play_arrow_black_24dp_1x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_play_arrow_black_24dp_1x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ic_playlist_play_black_24dp_1x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_playlist_play_black_24dp_1x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ic_stop_black_24dp_1x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ic_stop_black_24dp_1x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Connected" xml:space="preserve">
-    <value>Connected</value>
-  </data>
-  <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
-  </data>
-  <data name="Listening" xml:space="preserve">
-    <value>Listening</value>
-  </data>
-  <data name="Open" xml:space="preserve">
-    <value>Open</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>Start</value>
-  </data>
-  <data name="Stop" xml:space="preserve">
-    <value>Stop</value>
-  </data>
-  <data name="Stopped" xml:space="preserve">
-    <value>Stopped</value>
-  </data>
 </root>

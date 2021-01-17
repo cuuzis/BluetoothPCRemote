@@ -67,31 +67,42 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\BluetoothConnector.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="src\Connectors\BluetoothConnector.cs" />
     <Compile Include="src\Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="src\Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\Forms\State.cs" />
+    <Compile Include="src\Forms\UserControlQrCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="src\Forms\UserControlQrCode.Designer.cs">
+      <DependentUpon>UserControlQrCode.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\QRCodeGenerator.cs" />
-    <Compile Include="src\VirtualKeyboard.cs" />
-    <Compile Include="src\WlanConnector.cs" />
-    <EmbeddedResource Include="src\Forms\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="src\BarcodeGenerator\QRCodeGenerator.cs" />
+    <Compile Include="src\Connectors\VirtualKeyboard.cs" />
+    <Compile Include="src\Connectors\WlanConnector.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <EmbeddedResource Include="src\Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Forms\UserControlQrCode.resx">
+      <DependentUpon>UserControlQrCode.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -107,10 +118,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ic_playlist_play_black_24dp_1x.png" />
+    <None Include="Resources\ic_play_arrow_black_24dp_1x.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ic_play_arrow_black_24dp_1x.png" />
+    <None Include="Resources\ic_playlist_play_black_24dp_1x.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ic_stop_black_24dp_1x.png" />
